@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:mycricketline/utils/Color.dart';
 import 'package:mycricketline/utils/CustomWidget/shimmer.dart';
@@ -7,6 +8,7 @@ import 'package:mycricketline/utils/Style.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../AipProvider/LiveMatch.dart';
+import '../../../../AipProvider/ThemeProvider.dart';
 import '../../../../AipProvider/commentaryApi.dart';
 import '../../../../model/CommentaryData.dart';
 import '../../../../utils/CustomWidget/Externel.dart';
@@ -51,6 +53,8 @@ class _CommentaryState extends State<Commentary> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     final commentaryMatches = Provider.of<CommentaryApiProvider>(context);
     CricketMatch? commentaryApiMatches = commentaryMatches.commentaryApiMatches;
 /////////////////////////////////////////
@@ -58,14 +62,18 @@ class _CommentaryState extends State<Commentary> {
     var commentaryprovider = Provider.of<InfoProvider>(context);
     commentaryprovider.fetchLiveMatchesFullDataInfo(widget.idMatch);
     var infoData = commentaryprovider.infoMatches;
-
     if (commentaryApiMatches == null) {
       // Handle case when data is not available
-      return Scaffold(
-        body: Center(
-          child: summer2,
-        ),
-      );
+      return commentaryApiMatches == [] && commentaryApiMatches == "[]"
+          ? summer
+          : Center(
+              child: Lottie.asset(
+                'images/empty.json', // Path to your JSON animation file
+                width: 300,
+                height: 300,
+                fit: BoxFit.contain,
+              ),
+            );
     } else {
       return Scaffold(
         body: SizedBox(
@@ -78,10 +86,13 @@ class _CommentaryState extends State<Commentary> {
                 children: infoData.map(
                   (MyListData) {
                     return Container(
+                      width: 350,
                       margin: const EdgeInsets.all(10),
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Cricket_white,
+                        color: themeProvider.isDarkTheme
+                            ? CustomColor.cricketWhite
+                            : CustomColor.cricketBlackColor,
                         border: border,
                         borderRadius: CustomStylesBorder.borderRadius20,
                         boxShadow: [boxshadow],
@@ -95,7 +106,9 @@ class _CommentaryState extends State<Commentary> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
-                                  color: Cricket_white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   child: Column(
                                     children: [
                                       Container(
@@ -177,13 +190,11 @@ class _CommentaryState extends State<Commentary> {
 
                     return Column(
                       children: [
-                        /////////////////////////////////////////////////////////////
-
                         GestureDetector(
                           onTap: () => toggleExpansion(index),
                           child: Container(child: customboxbutton2(inningKey)),
                         ),
-                        if (isExpandedList[index])
+                        if (index == 0 ? isExpandedList[index] : true)
                           ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -214,11 +225,80 @@ class _CommentaryState extends State<Commentary> {
                                       Commentary1 commentary =
                                           commentaries[index];
                                       Data data = commentary.data;
+                                      colorChange() {
+                                        if (data.runs == "w") {
+                                          return CustomColor
+                                              .cricketGradientColor1;
+                                        } else if (data.runs == "6") {
+                                          return CustomColor.cricketBlackColor3;
+                                        } else if (data.runs == "4") {
+                                          return CustomColor
+                                              .cricketGradientColor2;
+                                        } else {
+                                          return Colors.grey;
+                                        }
+                                      }
 
                                       return ListTile(
-                                        title: Text(data.title ?? ''),
-                                        subtitle:
-                                            Text('Runs: ${data.runs ?? ''}'),
+                                        subtitle: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    Text('Runs'),
+                                                    Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width: 30,
+                                                        height: 30,
+                                                        padding:
+                                                            EdgeInsets.all(5),
+                                                        decoration: BoxDecoration(
+                                                            color:
+                                                                colorChange(),
+                                                            borderRadius:
+                                                                CustomStylesBorder
+                                                                    .borderRadiusfull),
+                                                        child: Text(
+                                                          ' ${data.runs ?? ''}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          maxLines: 20,
+                                                          style: CustomStyles
+                                                              .overmontserratwhite,
+                                                        )),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  data.title ?? '',
+                                                  style: CustomStyles
+                                                      .cardBoldDarkTextStyle,
+                                                ),
+                                                Container(
+                                                  width: 250,
+                                                  child: Text(
+                                                    ' ${data.description ?? ''}',
+                                                    textAlign: TextAlign.left,
+                                                    maxLines: 20,
+                                                    style: CustomStyles
+                                                        .cardTextStyle2,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     },
                                   ),

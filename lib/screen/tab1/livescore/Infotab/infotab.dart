@@ -3,11 +3,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mycricketline/utils/Color.dart';
 import 'package:mycricketline/utils/Style.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../../../../AipProvider/LiveMatch.dart';
+import '../../../../AipProvider/ThemeProvider.dart';
 import '../../../../model/player.dart';
 import '../../../../utils/CustomWidget/Dotetext.dart';
 import '../../../../utils/CustomWidget/shimmer.dart';
@@ -31,68 +33,84 @@ class Info extends StatefulWidget {
 class _InfoState extends State<Info> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     final screenWidth = MediaQuery.of(context).size.width;
     var Infoprovider = Provider.of<InfoProvider>(context);
     Infoprovider.fetchLiveMatchesFullDataInfo(widget.id);
     var infoData = Infoprovider.infoMatches;
 
     if (infoData.isEmpty) {
-      return summer;
+      return infoData == [] || infoData == "[]"
+          ? summer2
+          : Center(
+              child: Lottie.asset(
+                'assets/animation.json', // Path to your JSON animation file
+                width: 200,
+                height: 200,
+                fit: BoxFit.contain,
+              ),
+            );
     } else {
-      return Column(
-        children: [
-          Column(
-            children: infoData.map(
-              (Data) {
-                return Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 15),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: CustomStylesBorder.boderRadius10,
-                          border: border),
-                      width: screenWidth * 0.9,
-                      child: Column(children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(Data.toss == " "
-                                ? "${widget.type}"
-                                : Data.toss),
-                            Container(
-                                height: 30,
-                                width: 30,
-                                margin: const EdgeInsets.only(
-                                  left: 10,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      CustomStylesBorder.borderRadiusfull,
-                                  image: const DecorationImage(
-                                    image: AssetImage("images/toss.png"),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ))
-                          ],
+      return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            Column(
+              children: infoData.map(
+                (Data) {
+                  return Column(
+                    children: [
+                      if (Data.toss == " ")
+                        Container(
+                          padding: const EdgeInsets.all(5),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 15),
+                          decoration: BoxDecoration(
+                              color: themeProvider.isDarkTheme
+                                  ? CustomColor.cricketWhite
+                                  : CustomColor.cricketBlackColor,
+                              borderRadius: CustomStylesBorder.boderRadius10,
+                              border: border),
+                          width: screenWidth * 0.9,
+                          child: Column(children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(Data.toss == " "
+                                    ? "${widget.type}"
+                                    : Data.toss),
+                                Container(
+                                    height: 30,
+                                    width: 30,
+                                    margin: const EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          CustomStylesBorder.borderRadiusfull,
+                                      image: const DecorationImage(
+                                        image: AssetImage("images/toss.png"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ))
+                              ],
+                            ),
+                          ]),
                         ),
-                      ]),
-                    ),
-///////////////////team show
-                    SizedBox(
-                        height: 90,
-                        child: GestureDetector(
-                          onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => OnlinelineLiveTabTab(
-                            //             idMatch: match.matchId,
-                            //           )),
-                            // );
-                          },
+                      Container(
+                          padding: const EdgeInsets.all(5),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 15),
+                          decoration: BoxDecoration(
+                              color: themeProvider.isDarkTheme
+                                  ? CustomColor.cricketWhite
+                                  : CustomColor.cricketBlackColor,
+                              borderRadius: CustomStylesBorder.boderRadius10,
+                              border: border)),
+                      ///////////////////team show
+                      SizedBox(
+                          height: 90,
                           child: InkWell(
                             onTap: () {
                               showModalBottomSheet<void>(
@@ -112,7 +130,9 @@ class _InfoState extends State<Info> {
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 15),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: themeProvider.isDarkTheme
+                                    ? CustomColor.cricketWhite
+                                    : CustomColor.cricketBlackColor,
                                 border: border,
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -142,9 +162,9 @@ class _InfoState extends State<Info> {
                                       SizedBox(
                                         width: 40,
                                         child: Icon(
-                                          Icons.line_axis,
+                                          Icons.arrow_circle_right_sharp,
                                           size: 20,
-                                          color: Cricket_white,
+                                          color: CustomColor.cricketBlackColor,
                                         ),
                                       ),
                                     ],
@@ -170,160 +190,236 @@ class _InfoState extends State<Info> {
                                 ],
                               ),
                             ),
+                          )),
+
+                      sizeboxSmallh,
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 15),
+                        decoration: BoxDecoration(
+                            color: themeProvider.isDarkTheme
+                                ? CustomColor.cricketWhite
+                                : CustomColor.cricketBlackColor,
+                            borderRadius: CustomStylesBorder.boderRadius10,
+                            border: border),
+                        width: screenWidth * 0.9,
+                        child: Column(children: [
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text("Match Detail",
+                                          style: CustomStyles
+                                              .cardBoldDarkDrawerTextStyle)
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("Series",
+                                          style: CustomStyles
+                                              .smallLightTextStylebold2)
+                                    ],
+                                  ),
+                                  sizeboxSmallh,
+                                  SizedBox(
+                                    width: 300,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("${Data.series}"),
+                                          Divider(),
+                                        ]),
+                                  ),
+                                  Divider(),
+                                  sizeboxSmallh,
+                                  Row(
+                                    children: [
+                                      Text("Match",
+                                          style: CustomStyles
+                                              .smallLightTextStylebold2)
+                                    ],
+                                  ),
+                                  sizeboxSmallh,
+                                  SizedBox(
+                                    width: 300,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              "${Data.teamA} VS ${Data.teamB}"),
+                                          Divider(),
+                                        ]),
+                                  ),
+                                  Divider(),
+                                  Row(
+                                    children: [
+                                      Text("Date ",
+                                          style: CustomStyles
+                                              .smallLightTextStylebold2)
+                                    ],
+                                  ),
+                                  sizeboxSmallh,
+                                  SizedBox(
+                                    width: 300,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [Text(" ${Data.matchDate} ")],
+                                    ),
+                                  ),
+                                  sizeboxSmallh,
+                                  Row(
+                                    children: [
+                                      Text("Time ",
+                                          style: CustomStyles
+                                              .smallLightTextStylebold2)
+                                    ],
+                                  ),
+                                  sizeboxSmallh,
+                                  SizedBox(
+                                    width: 300,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [Text(" ${Data.matchTime} ")],
+                                    ),
+                                  ),
+                                  sizeboxSmallh,
+                                  Row(
+                                    children: [
+                                      Text("Match No  ",
+                                          style: CustomStyles
+                                              .smallLightTextStylebold2)
+                                    ],
+                                  ),
+                                  sizeboxSmallh,
+                                  SizedBox(
+                                    width: 300,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [Text("${Data.match} ")],
+                                    ),
+                                  ),
+                                  sizeboxSmallh,
+                                  Row(
+                                    children: [
+                                      Text("venu ",
+                                          style: CustomStyles
+                                              .smallLightTextStylebold2)
+                                    ],
+                                  ),
+                                  sizeboxSmallh,
+                                  SizedBox(
+                                    width: 300,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [Text("${Data.venue}")],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        )),
+                        ]),
+                      ),
+                      // ////////////////////////////////////////////////////////////////yetToBet
 
-                    sizeboxSmallh,
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 15),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: CustomStylesBorder.boderRadius10,
-                          border: border),
-                      width: screenWidth * 0.9,
-                      child: Column(children: [
-                        Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text("Match Detail",
-                                        style: CustomStyles
-                                            .cardBoldDarkDrawerTextStyle)
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text("Match",
-                                        style: CustomStyles
-                                            .smallLightTextStylebold2)
-                                  ],
-                                ),
-                                sizeboxSmallh,
-                                SizedBox(
-                                  width: 300,
-                                  child: Column(children: [
-                                    Text(
-                                        "${Data.series}, ${Data.match}, ${Data.venue}"),
-                                    Divider(),
-                                  ]),
-                                ),
-                                Divider(),
-                                sizeboxSmallh,
-                                Row(
-                                  children: [
-                                    Text("Match Start Time ",
-                                        style: CustomStyles
-                                            .smallLightTextStylebold2)
-                                  ],
-                                ),
-                                sizeboxSmallh,
-                                SizedBox(
-                                  width: 300,
-                                  child: Column(
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 15),
+                        decoration: BoxDecoration(
+                            color: themeProvider.isDarkTheme
+                                ? CustomColor.cricketWhite
+                                : CustomColor.cricketBlackColor,
+                            borderRadius: CustomStylesBorder.boderRadius10,
+                            border: border),
+                        width: screenWidth * 0.9,
+                        child: Column(children: [
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
                                     children: [
-                                      Text(
-                                          " ${Data.matchTime} ,${Data.matchDate} ,${Data.series.toString()}")
+                                      Text("Rafree/Umpire",
+                                          style: CustomStyles
+                                              .cardBoldDarkDrawerTextStyle)
                                     ],
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ]),
-                    ),
-                    // ////////////////////////////////////////////////////////////////yetToBet
-
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 15),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: CustomStylesBorder.boderRadius10,
-                          border: border),
-                      width: screenWidth * 0.9,
-                      child: Column(children: [
-                        Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text("Rafree/Umpire",
-                                        style: CustomStyles
-                                            .cardBoldDarkDrawerTextStyle)
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text("Rafree:",
-                                        style: CustomStyles
-                                            .smallLightTextStylebold2),
-                                  ],
-                                ),
-                                sizeboxSmallh,
-                                SizedBox(
-                                  width: 300,
-                                  child: Column(children: [
-                                    Text("${Data.referee}"),
-                                    Divider(),
-                                  ]),
-                                ),
-                                sizeboxSmallh,
-                                Row(
-                                  children: [
-                                    Text("Umpire: ",
-                                        style: CustomStyles
-                                            .smallLightTextStylebold2),
-                                  ],
-                                ),
-                                sizeboxSmallh,
-                                SizedBox(
-                                  width: 300,
-                                  child: Column(
+                                  Row(
                                     children: [
-                                      Text(" ${Data.umpire}"),
+                                      Text("Rafree:",
+                                          style: CustomStyles
+                                              .smallLightTextStylebold2),
+                                    ],
+                                  ),
+                                  sizeboxSmallh,
+                                  SizedBox(
+                                    width: 300,
+                                    child: Column(children: [
+                                      Text("${Data.referee}"),
+                                      Divider(),
+                                    ]),
+                                  ),
+                                  sizeboxSmallh,
+                                  Row(
+                                    children: [
+                                      Text("Umpire: ",
+                                          style: CustomStyles
+                                              .smallLightTextStylebold2),
+                                    ],
+                                  ),
+                                  sizeboxSmallh,
+                                  SizedBox(
+                                    width: 300,
+                                    child: Column(
+                                      children: [
+                                        Text(" ${Data.umpire}"),
+                                        Divider(),
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("Thire Umpire : ",
+                                          style: CustomStyles
+                                              .smallLightTextStylebold2),
                                       Divider(),
                                     ],
                                   ),
-                                ),
-                                Row(
-                                  children: [
-                                    Text("Thire Umpire : ",
-                                        style: CustomStyles
-                                            .smallLightTextStylebold2),
-                                    Divider(),
-                                  ],
-                                ),
-                                sizeboxSmallh,
-                                SizedBox(
-                                  width: 300,
-                                  child: Column(
-                                    children: [
-                                      Text(" ${Data.thirdUmpire}" ?? " "),
-                                      Divider(),
-                                    ],
+                                  sizeboxSmallh,
+                                  SizedBox(
+                                    width: 300,
+                                    child: Column(
+                                      children: [
+                                        Text(" ${Data.thirdUmpire}" ?? " "),
+                                        Divider(),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ]),
-                    ),
-                  ],
-                );
-              },
-            ).toList(),
-          ),
-        ],
+                                ],
+                              ),
+                            ],
+                          ),
+                        ]),
+                      ),
+                    ],
+                  );
+                },
+              ).toList(),
+            ),
+          ],
+        ),
       );
     }
   }
@@ -353,7 +449,7 @@ class _CricketPlayerListState extends State<CricketPlayerList> {
       return SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
-          height: 2000,
+          height: 1800,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: 2, // Assuming there are two teams in the match
@@ -394,9 +490,9 @@ class _CricketPlayerListState extends State<CricketPlayerList> {
                         ),
                       ),
                     ),
-                    Divider(
+                    const Divider(
                       thickness: 2,
-                      color: Cricket_ShadowColor,
+                      color: CustomColor.cricketShadowColor,
                     ),
                     if (isPlayerListVisible)
                       Column(

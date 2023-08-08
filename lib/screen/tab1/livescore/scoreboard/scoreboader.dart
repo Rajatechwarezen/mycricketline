@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mycricketline/utils/Color.dart';
 import 'package:mycricketline/utils/CustomWidget/shimmer.dart';
 import 'package:mycricketline/utils/Style.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../AipProvider/LiveMatch.dart';
+import '../../../../AipProvider/ThemeProvider.dart';
 import '../../../../model/scoreModel.dart';
 
 // ignore: must_be_immutable
@@ -26,165 +28,38 @@ class _ScoreTableState extends State<ScoreTable> {
   Widget build(BuildContext context) {
     var myscore = Provider.of<ScorerProvider>(context);
 
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     myscore.fetchScorecard(widget.idMatch.toString());
 
     MyListData = myscore.scorerData;
-
+//////////////////////////
+    var Infoprovider = Provider.of<InfoProvider>(context);
+    Infoprovider.fetchLiveMatchesFullDataInfo(widget.idMatch);
+    var infoData = Infoprovider.infoMatches;
     if (MyListData == null) {
-      return summer;
+      return MyListData == [] || MyListData == "[]"
+          ? summer
+          : Center(
+              child: Lottie.asset(
+                'images/empty.json', // Path to your JSON animation file
+                width: 300,
+                height: 300,
+                fit: BoxFit.contain,
+              ),
+            );
     } else {
       return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //   ExpansionPanelList(
-            //     elevation: 0,
-            //     expandedHeaderPadding: EdgeInsets.zero,
-            //     expansionCallback: (int index, bool isExpanded) {
-            //       setState(() {
-            //         if (index == 0) {
-            //           _isBatsmanExpanded = !isExpanded;
-            //         } else if (index == 1) {
-            //           _isBowlerExpanded = !isExpanded;
-            //         }
-            //       });
-            //     },
-            //     children: [
-            //       ExpansionPanel(
-            //         headerBuilder: (BuildContext context, bool isExpanded) {
-            //           return ListTile(
-            //             title: Text(
-            //               'Batsman',
-            //               style: CustomStyles.cardBoldDarkTextStyle,
-            //             ),
-            //           );
-            //         },
-            //         body: SingleChildScrollView(
-            //           scrollDirection: Axis.horizontal,
-            //           child: DataTable(
-            //             headingRowColor: MaterialStateColor.resolveWith(
-            //                 (states) => Cricket_Primary!),
-            //             dataRowColor: MaterialStateColor.resolveWith(
-            //                 (states) => Cricket_ShadowColor!),
-            //             columns: [
-            //               DataColumn(
-            //                 label: SizedBox(
-            //                   width: 100,
-            //                   child: Text('Batsman',
-            //                       style: CustomStyles.cardBoldDarkTextStyleblue),
-            //                 ),
-            //               ),
-            //               DataColumn(
-            //                 label:
-            //                     Text('Run', style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //               DataColumn(
-            //                 label:
-            //                     Text('Ball', style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //               DataColumn(
-            //                 label:
-            //                     Text('Fours', style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //               DataColumn(
-            //                 label:
-            //                     Text('Sixes', style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //               DataColumn(
-            //                 label: Text('Strike Rate',
-            //                     style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //             ],
-            //             rows: MyListData!.data!.team1.batsman.map((batsman) {
-            //               return DataRow(
-            //                 cells: [
-            //                   DataCell(Text(batsman.name ?? "")),
-            //                   DataCell(Text(batsman.run.toString())),
-            //                   DataCell(Text(batsman.ball.toString())),
-            //                   DataCell(Text(batsman.fours.toString())),
-            //                   DataCell(Text(batsman.sixes.toString())),
-            //                   DataCell(Text(batsman.strikeRate.toString())),
-            //                 ],
-            //               );
-            //             }).toList(),
-            //           ),
-            //         ),
-            //         isExpanded: _isBatsmanExpanded,
-            //       ),
-            //       ExpansionPanel(
-            //         headerBuilder: (BuildContext context, bool isExpanded) {
-            //           return ListTile(
-            //             title: Text(
-            //               'Bowler',
-            //               style: CustomStyles.cardBoldDarkDrawerTextStyle,
-            //             ),
-            //           );
-            //         },
-            //         body: SingleChildScrollView(
-            //           scrollDirection: Axis.horizontal,
-            //           child: DataTable(
-            //             headingRowColor: MaterialStateColor.resolveWith(
-            //                 (states) => Cricket_Primary!),
-            //             dataRowColor: MaterialStateColor.resolveWith(
-            //                 (states) => Cricket_ShadowColor!),
-            //             columns: [
-            //               DataColumn(
-            //                 label: SizedBox(
-            //                   width: 100,
-            //                   child: Text('Bowler',
-            //                       style: CustomStyles.cardBoldDarkTextStyleblue),
-            //                 ),
-            //               ),
-            //               DataColumn(
-            //                 label:
-            //                     Text('Run', style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //               DataColumn(
-            //                 label:
-            //                     Text('Over', style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //               DataColumn(
-            //                 label: Text('Maiden',
-            //                     style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //               DataColumn(
-            //                 label: Text('Wicket',
-            //                     style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //               DataColumn(
-            //                 label: Text('Economy',
-            //                     style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //               DataColumn(
-            //                 label: Text('Dot Ball',
-            //                     style: CustomStyles.cardBoldDarkTextStyleblue),
-            //               ),
-            //             ],
-            //             rows:
-            //                 MyListData!.data!.team2.bolwer.map<DataRow>((bowler) {
-            //               return DataRow(
-            //                 cells: [
-            //                   DataCell(Text(bowler.name)),
-            //                   DataCell(Text(bowler.run.toString())),
-            //                   DataCell(Text(bowler.over.toString())),
-            //                   DataCell(Text(bowler.maiden.toString())),
-            //                   DataCell(Text(bowler.wicket.toString())),
-            //                   DataCell(Text(bowler.economy.toString())),
-            //                   DataCell(Text(bowler.dotBall.toString())),
-            //                 ],
-            //               );
-            //             }).toList(),
-            //           ),
-            //         ),
-            //         isExpanded: _isBowlerExpanded,
-            //       ),
-            //     ],
-            //   ),
             Container(
               margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Cricket_white,
+                color: themeProvider.isDarkTheme
+                    ? CustomColor.cricketWhite
+                    : CustomColor.cricketBlackColor,
                 border: border,
                 borderRadius: CustomStylesBorder.borderRadius20,
                 boxShadow: [boxshadow],
@@ -198,7 +73,6 @@ class _ScoreTableState extends State<ScoreTable> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Container(
-                          color: Cricket_white,
                           child: Column(
                             children: [
                               Container(
@@ -211,13 +85,13 @@ class _ScoreTableState extends State<ScoreTable> {
                                   borderRadius:
                                       CustomStylesBorder.borderRadiusfull,
                                   image: DecorationImage(
-                                    image: NetworkImage(
-                                        MyListData!.data!.team1.team.flag),
+                                    image: NetworkImage(infoData[0].teamAImg),
                                     fit: BoxFit.fill,
                                   ),
                                 ),
                               ),
-                              Text(MyListData!.data!.team1.team.name),
+                              sizeboxSmallh,
+                              Text(infoData[0].teamA),
                             ],
                           ),
                         ),
@@ -249,14 +123,13 @@ class _ScoreTableState extends State<ScoreTable> {
                                   borderRadius:
                                       CustomStylesBorder.borderRadiusfull,
                                   image: DecorationImage(
-                                    image: NetworkImage(
-                                        MyListData!.data!.team2.team.flag),
+                                    image: NetworkImage(infoData[0].teamBImg),
                                     fit: BoxFit.fill,
                                   ),
                                 ),
                               ),
                               sizeboxSmallh,
-                              Text(MyListData!.data!.team2.team.name),
+                              Text(infoData[0].teamB),
                             ],
                           ),
                         ),
@@ -265,7 +138,7 @@ class _ScoreTableState extends State<ScoreTable> {
                   Text(
                     MyListData!.result ?? "",
                     style: const TextStyle(
-                      color: Cricket_BlackColor3,
+                      color: CustomColor.cricketBlackColor3,
                     ),
                   ),
                 ],
@@ -351,10 +224,10 @@ allTeam(
                 columnSpacing:
                     13, // Adjust the spacing between columns as needed
 
-                headingRowColor:
-                    MaterialStateColor.resolveWith((states) => Cricket_white),
-                dataRowColor:
-                    MaterialStateColor.resolveWith((states) => Cricket_white),
+                headingRowColor: MaterialStateColor.resolveWith(
+                    (states) => CustomColor.cricketWhite),
+                dataRowColor: MaterialStateColor.resolveWith(
+                    (states) => CustomColor.cricketWhite),
                 columns: [
                   DataColumn(
                     label: SizedBox(
@@ -403,9 +276,9 @@ allTeam(
                     13, // Adjust the spacing between columns as needed
 
                 headingRowColor: MaterialStateColor.resolveWith(
-                    (states) => Cricket_app_Background!),
+                    (states) => CustomColor.cricketAppBackground!),
                 dataRowColor: MaterialStateColor.resolveWith(
-                    (states) => Cricket_app_Background!),
+                    (states) => CustomColor.cricketAppBackground!),
                 columns: [
                   DataColumn(
                     label: SizedBox(

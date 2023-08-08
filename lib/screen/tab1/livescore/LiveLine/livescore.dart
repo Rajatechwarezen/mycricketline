@@ -3,6 +3,7 @@ import 'package:mycricketline/utils/CustomWidget/shimmer.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../AipProvider/LiveMatch.dart';
+import '../../../../AipProvider/ThemeProvider.dart';
 import '../../../../utils/Color.dart';
 import '../../../../utils/CustomWidget/Dotetext.dart';
 import '../../../../utils/CustomWidget/TitleBtn.dart';
@@ -23,6 +24,7 @@ class _LiveScoresState extends State<LiveScores> {
   @override
   Widget build(BuildContext context) {
     final liveMatchProvider = Provider.of<LiveMatchProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return FutureBuilder<void>(
       future: liveMatchProvider.fetchLiveMatches(),
@@ -74,7 +76,9 @@ class _LiveScoresState extends State<LiveScores> {
                           height: 120,
                           margin: const EdgeInsets.symmetric(horizontal: 10),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: themeProvider.isDarkTheme
+                                ? CustomColor.cricketWhite
+                                : CustomColor.cricketBlackColor,
                             border: border,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [boxshadow],
@@ -95,8 +99,8 @@ class _LiveScoresState extends State<LiveScores> {
                                   ],
                                 ),
                               ),
-                              const Divider(
-                                color: Cricket_textColorSecondary,
+                              Divider(
+                                color: CustomColor.cricketTextColorSecondary,
                                 thickness: 1,
                               ),
                               // Row of team 1

@@ -1,15 +1,20 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:mycricketline/utils/CustomWidget/Dotetext.dart';
 import 'package:mycricketline/utils/CustomWidget/Externel.dart';
 import 'package:provider/provider.dart';
 
 import '../../../AipProvider/LiveMatch.dart';
+import '../../../AipProvider/ThemeProvider.dart';
 import '../../../model/Allmodel.dart';
 import '../../../utils/Color.dart';
 import '../../../utils/CustomWidget/Countdown.dart';
 import '../../../utils/CustomWidget/TitleBtn.dart';
 import '../../../utils/CustomWidget/shimmer.dart';
 import '../../../utils/Style.dart';
+import '../../Ads/bannerAds.dart';
+import '../../Ads/custom.dart';
+import '../../Ads/netiveAds.dart';
 import '../../tab3/LiveFullScreenList.dart';
 import '../livescore/LiveLine/OnlineLivTape.dart';
 import '../livescore/LiveLine/RealTimeLive.dart';
@@ -28,6 +33,8 @@ class _CorouselContainerState extends State<CorouselContainer> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final liveMatchProvider = Provider.of<LiveMatchProvider>(context);
@@ -57,7 +64,6 @@ class _CorouselContainerState extends State<CorouselContainer> {
                           const Duration(milliseconds: 800),
                       viewportFraction: 1.0,
                       disableCenter: false,
-                      // Add the pagination option
                       onPageChanged: (index, reason) {
                         setState(() {
                           _currentSlide = index;
@@ -73,11 +79,11 @@ class _CorouselContainerState extends State<CorouselContainer> {
 
                       colorChange() {
                         if (detail.matchStatus == "Live") {
-                          return Cricket_Gradient_color1;
+                          return CustomColor.cricketGradientColor1;
                         } else if (detail.matchStatus == "Finished") {
-                          return Cricket_Gradient_color2;
+                          return CustomColor.cricketGradientColor2;
                         } else {
-                          return Cricket_BlackColor3;
+                          return CustomColor.cricketBlackColor3;
                         }
                       }
 
@@ -97,7 +103,7 @@ class _CorouselContainerState extends State<CorouselContainer> {
                             detail.teamBOver.split("&")[0]
                           ];
                         } else {
-                          return ["---", "---", "---", "---"];
+                          return ["", "", "", ""];
                         }
                       }
 
@@ -116,198 +122,211 @@ class _CorouselContainerState extends State<CorouselContainer> {
                               );
                             },
                             child: Container(
-                              height: screenWidth * 0.5,
+                              height: screenHeight / 3.9,
+                              width: screenWidth / 1,
                               decoration: BoxDecoration(
                                 borderRadius: CustomStylesBorder.boderRadius10,
                                 border: border,
                                 boxShadow: [boxshadow],
-                                color: Colors.white, // kiya color
+                                color: themeProvider.isDarkTheme
+                                    ? CustomColor.cricketWhite
+                                    : CustomColor
+                                        .cricketBlackColor, // kiya color
                               ),
                               margin: const EdgeInsets.only(
-                                  top: 5, left: 10, right: 10),
-                              padding: const EdgeInsets.all(10),
-                              child: Stack(children: [
-                                Positioned(
-                                    top: 0,
-                                    left: 0,
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: 50,
-                                          width: 50,
-                                          margin: const EdgeInsets.only(
-                                              top: 5, left: 10, right: 10),
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            borderRadius: CustomStylesBorder
-                                                .borderRadiusfull,
-                                            border: border,
-                                            image: DecorationImage(
-                                              image:
-                                                  NetworkImage(detail.teamAImg),
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 50,
-                                          width: 50,
-                                          margin: const EdgeInsets.only(
-                                              top: 5, left: 10, right: 10),
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            borderRadius: CustomStylesBorder
-                                                .borderRadiusfull,
-                                            border: border,
-                                            image: DecorationImage(
-                                              image:
-                                                  NetworkImage(detail.teamBImg),
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )),
-                                // Positioned(
-                                //   top: 10,
-                                //   right: 124,
-                                //   child: Center(
-                                //     child: Container(
-                                //       height: screenWidth * 0.2,
-                                //       width: screenWidth * 0.2,
-                                //       margin: const EdgeInsets.only(
-                                //           top: 5, left: 10, right: 10),
-                                //       padding: const EdgeInsets.all(10),
-                                //       decoration: const BoxDecoration(
-                                //         image: DecorationImage(
-                                //           image: AssetImage("images/vs2.png"),
-                                //           fit: BoxFit.fill,
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
-                                Positioned(
-                                  top: 40,
-                                  left: 190,
-                                  child: detail.matchStatus == "Upcoming"
-                                      ? Container(
-                                          decoration: BoxDecoration(
-                                              color: Cricket_Gradient_color1,
-                                              borderRadius: CustomStylesBorder
-                                                  .boderRadius10),
-                                          child: CountdownTimerWidget(
-                                              totalSeconds: remainingSeconds),
-                                        )
-                                      : const Text(""),
-                                ),
-
-                                Positioned(
-                                    top: 10,
-                                    left: 70,
-                                    child: Container(
-                                      height: 100,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Column(children: [
-                                            Text(
-                                              detail.teamAShort,
-                                              style: CustomStyles
-                                                  .cardBoldDarkDrawerTextStyle,
-                                            ),
-                                            Text(
-                                              checkChange()[0],
-                                              style:
-                                                  CustomStyles.cardTextStyle2,
-                                            ),
-                                          ]),
-                                          Column(children: [
-                                            Text(
-                                              detail.teamBShort,
-                                              style: CustomStyles
-                                                  .cardBoldDarkDrawerTextStyle,
-                                            ),
-                                            Text(
-                                              checkChange()[1],
-                                              style:
-                                                  CustomStyles.cardTextStyle2,
-                                            ),
-                                          ]),
-                                        ],
-                                      ),
-                                    )),
-
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  child: Container(
-                                    width: screenWidth * 0.9,
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          CustomStylesBorder.boderRadius10,
-                                      color: Colors.black.withOpacity(0.5),
-                                    ),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(children: [
-                                            Text(
-                                              detail.matchStatus,
-                                              style: CustomStyles
-                                                  .smallLightTextStylebold,
-                                            ),
-                                            Text(
-                                              detail.series,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: CustomStyles
-                                                  .smallLightTextStyle,
-                                            )
-                                          ]),
-                                          Row(children: [
-                                            Text(
-                                              "",
-                                              style: CustomStyles
-                                                  .smallLightTextStylebold,
-                                            ),
-                                            Text(
-                                              ' :- ${detail.matchType}',
-                                              style: CustomStyles
-                                                  .smallLightTextStyle,
-                                            )
-                                          ]),
-                                        ]),
-                                  ),
-                                ),
-                                Positioned(
-                                    top: 0,
-                                    right: 10,
-                                    child: Container(
-                                        alignment: Alignment.center,
-                                        width: screenWidth * 0.3,
+                                  top: 10, left: 10, right: 10),
+                              padding: const EdgeInsets.all(2),
+                              child: Column(children: [
+                                //team status
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    //team status
+                                    Container(
                                         padding: EdgeInsets.all(5),
                                         decoration: BoxDecoration(
-                                            color: colorChange(),
+                                            borderRadius: CustomStylesBorder
+                                                .boderRadius10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              truncateText(detail.series, 53),
+                                              style: CustomStyles
+                                                  .smallLightTextStyle2,
+                                            ),
+                                            Text(
+                                              "${detail.matchDate}, ${detail.matchTime}",
+                                              style: CustomStyles
+                                                  .smallLightTextStylebold2,
+                                            ),
+                                          ],
+                                        )),
+
+                                    //team type
+                                    Container(
+                                        alignment: Alignment.center,
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
                                             borderRadius: CustomStylesBorder
                                                 .boderRadius10),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            const Icon(
-                                              Icons.play_arrow,
-                                              size: 10,
-                                              color: Cricket_white,
-                                            ),
-                                            Text(
-                                              detail.matchStatus,
-                                              style: CustomStyles.cardTextStyle,
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                color: colorChange(),
+                                                border: border,
+                                                borderRadius: CustomStylesBorder
+                                                    .boderRadius10,
+                                              ),
+                                              child: Text(
+                                                detail.matchStatus,
+                                                style:
+                                                    CustomStyles.cardTextStyle(
+                                                        CustomColor
+                                                            .cricketWhite),
+                                              ),
                                             ),
                                           ],
-                                        ))),
+                                        )),
+                                  ],
+                                ),
+
+                                Divider(
+                                  height: 5,
+                                ),
+                                //team name
+                                Row(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              height: 50,
+                                              width: 50,
+                                              margin: const EdgeInsets.only(
+                                                  top: 2, left: 5, right: 10),
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                borderRadius: CustomStylesBorder
+                                                    .borderRadiusfull,
+                                                border: border,
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      detail.teamAImg),
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    detail.matchStatus ==
+                                                            "Upcoming"
+                                                        ? detail.teamA ?? ""
+                                                        : detail.teamAShort ??
+                                                            "", // Use the null-aware operator (??) to handle null values
+                                                    style: CustomStyles
+                                                        .cardBoldDarkDrawerTextStyle,
+                                                  ),
+                                                  if (detail.matchStatus !=
+                                                      "Upcoming") // Use 'if' to conditionally show the Text widget
+                                                    Text(
+                                                      checkChange()[0],
+                                                      style: CustomStyles
+                                                          .cardTextStyle2,
+                                                    ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              height: 50,
+                                              width: 50,
+                                              margin: const EdgeInsets.only(
+                                                  top: 5, left: 5, right: 10),
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                borderRadius: CustomStylesBorder
+                                                    .borderRadiusfull,
+                                                border: border,
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      detail.teamBImg),
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              child: Column(children: [
+                                                Text(
+                                                  detail.matchStatus ==
+                                                          "Upcoming"
+                                                      ? detail.teamB ?? ""
+                                                      : detail.teamBShort ?? "",
+                                                  style: CustomStyles
+                                                      .cardBoldDarkDrawerTextStyle,
+                                                ),
+                                                if (detail.matchStatus !=
+                                                    "Upcoming") // Use 'if' to conditionally show the Text widget
+                                                  Text(
+                                                    checkChange()[1],
+                                                    style: CustomStyles
+                                                        .cardTextStyle2,
+                                                  ),
+                                              ]),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+
+                                Divider(
+                                  height: 5,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 0, left: 5, right: 10),
+                                      child: detail.matchStatus == "Upcoming"
+                                          ? Container(
+                                              child: SimpleCounter(
+                                                  totalSeconds:
+                                                      remainingSeconds),
+                                            )
+                                          : const Text(""),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(detail.favTeam.toString()),
+                                        smallboxRed(detail.min.toString()),
+                                        smallboxblue(detail.max.toString())
+                                      ],
+                                    ),
+                                  ],
+                                )
                               ]),
                             ),
                           ),
@@ -315,43 +334,26 @@ class _CorouselContainerState extends State<CorouselContainer> {
                       );
                     }).toList(),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    height: 150,
-                    child: Container(
-                      width: 350,
-                      height: 170,
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        border: border,
-                        borderRadius: CustomStylesBorder.boderRadius10,
-                        image: const DecorationImage(
-                          image: AssetImage("images/vs.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List<Widget>.generate(
                       home.length, // Replace `totalSlides` with the total number of slides
                       (index) {
                         return Container(
-                          width: 5,
-                          height: 5,
-                          margin: EdgeInsets.symmetric(horizontal: 4),
+                          width: 8,
+                          height: 8,
+                          margin: EdgeInsets.symmetric(horizontal: 3),
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: _currentSlide == index
-                                  ? Cricket_Primary
-                                  : Colors.white,
+                                  ? CustomColor.cricketPrimary
+                                  : CustomColor.cricketWhite,
                               border: border),
                         );
                       },
                     ),
                   ),
-                  SizedBox(height: 10),
+                  CustomAdWidget(),
                 ],
               );
       },
@@ -365,7 +367,7 @@ CustomOverLay(text, screenWidth) {
     padding: EdgeInsets.all(5),
     decoration: BoxDecoration(
       borderRadius: CustomStylesBorder.boderRadius10,
-      color: Colors.black.withOpacity(0.5),
+      color: CustomColor.cricketBlackColor.withOpacity(0.5),
     ),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(children: [

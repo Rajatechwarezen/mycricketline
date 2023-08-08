@@ -3,12 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:mycricketline/screen/tab1/livescore/LiveLine/RealTimeLive.dart';
 import 'package:provider/provider.dart';
 
+import 'dart:math';
+
+import 'dart:async';
+
+import 'package:floating/floating.dart';
+
 import '../../../../AipProvider/LiveMatch.dart';
 import '../../../../utils/Color.dart';
 import '../../../../utils/Style.dart';
 import '../../../short/shortReel.dart';
 import '../Infotab/infotab.dart';
-import '../Pip/pip.dart';
+
 import '../commentary/commentary.dart';
 import '../odds/odds.dart';
 import '../pointTable/pointTable.dart';
@@ -37,7 +43,7 @@ class _OnlinelineLiveTabTabState extends State<OnlinelineLiveTabTab>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 7,
+      length: 6,
       vsync: this,
     );
   }
@@ -57,11 +63,11 @@ class _OnlinelineLiveTabTabState extends State<OnlinelineLiveTabTab>
     getSiriId = infoData.map((e) => e.seriesId);
 
     return Scaffold(
-        backgroundColor: Cricket_app_Background,
+        backgroundColor: CustomColor.cricketAppBackground,
         appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: CustomColor.cricketBlackColor),
           elevation: 0,
-          backgroundColor: Cricket_app_Background,
+          backgroundColor: CustomColor.cricketAppBackground,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight),
             child: SingleChildScrollView(
@@ -70,7 +76,7 @@ class _OnlinelineLiveTabTabState extends State<OnlinelineLiveTabTab>
               child: TabBar(
                 labelPadding: EdgeInsets.all(5),
                 controller: _tabController,
-                indicatorColor: Cricket_Primary,
+                indicatorColor: CustomColor.cricketPrimary,
                 isScrollable: true,
                 automaticIndicatorColorAdjustment: true,
                 tabs: [
@@ -159,20 +165,6 @@ class _OnlinelineLiveTabTabState extends State<OnlinelineLiveTabTab>
                       ),
                     ),
                   ),
-                  Tab(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                          border: border,
-                          borderRadius: CustomStylesBorder.borderRadius20),
-                      child: Text(
-                        "Pip",
-                        style: CustomStyles.smallTextStyle2,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -183,10 +175,10 @@ class _OnlinelineLiveTabTabState extends State<OnlinelineLiveTabTab>
             TabBarView(
               controller: _tabController,
               children: [
-                RealTimeLive(
+                DEMO(
                     idMatch: widget.idMatch,
                     type: widget.type,
-                    Data: widget.data),
+                    data: widget.data),
                 Info(
                   id: widget.idMatch,
                   type: widget.type,
@@ -197,10 +189,77 @@ class _OnlinelineLiveTabTabState extends State<OnlinelineLiveTabTab>
                 PointTableSreen(
                   idmatch: getSiriId,
                 ),
-                HomePage()
               ],
             ),
           ],
         ));
   }
+}
+
+class DEMO extends StatefulWidget {
+  final int idMatch;
+  final String type;
+  final dynamic data;
+  const DEMO({super.key, required this.idMatch, required this.type, this.data});
+
+  @override
+  State<DEMO> createState() => _DEMOState();
+}
+
+class _DEMOState extends State<DEMO> with WidgetsBindingObserver {
+  final floating = Floating();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    floating.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState lifecycleState) {
+    if (lifecycleState == AppLifecycleState.inactive) {
+      floating.enable(aspectRatio: Rational.square());
+    }
+  }
+
+  Future<void> enablePip(BuildContext context) async {
+    final rational = const Rational.landscape();
+    final screenSize =
+        MediaQuery.of(context).size * MediaQuery.of(context).devicePixelRatio;
+    final height = screenSize.width ~/ rational.aspectRatio;
+
+    final status = await floating.enable(
+      aspectRatio: rational,
+      sourceRectHint: Rectangle<int>(
+        0,
+        (screenSize.height ~/ 2) - (height ~/ 3),
+        screenSize.width.toInt(),
+        height,
+      ),
+    );
+    debugPrint('PiP enabled? $status');
+  }
+
+  @override
+  Widget build(BuildContext context) => WillPopScope(
+        onWillPop: () async {
+          // This function will be executed when the user clicks on the back/pop button
+          enablePip(context);
+
+          return true; // Set this to false if you want to prevent the pop.
+        },
+        child: PiPSwitcher(
+          childWhenDisabled: RealTimeLive(
+              idMatch: widget.idMatch, type: widget.type, Data: widget.data),
+          childWhenEnabled: RealTimeLive(
+              idMatch: widget.idMatch, type: widget.type, Data: widget.data),
+        ),
+      );
 }

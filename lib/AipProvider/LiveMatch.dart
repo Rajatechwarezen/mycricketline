@@ -31,43 +31,6 @@ class LiveMatchProvider extends ChangeNotifier {
   List<LiveMatchFull> _oneliveDad = [];
   List<LiveMatchFull> get oneliveDad => _oneliveDad;
 
-  // fetchLiveMatchesFullData(int id) async {
-  //   const url =
-  //       'http://apicricketchampion.in/webservices/liveMatch/20122cd5366e30f0847774c9d7698d30';
-
-  //   try {
-  //     final request = http.MultipartRequest('POST', Uri.parse(url));
-  //     request.fields['match_id'] = "$id";
-
-  //     final response = await request.send();
-
-  //     if (response.statusCode == 200) {
-  //       final responseBody = await response.stream.bytesToString();
-  //       final data = json.decode(responseBody);
-  //       if (data['status'] == true && data['data'] != null) {
-  //         if (data['data'] is List) {
-  //           List<LiveMatchFull> matches = (data['data'] as List)
-  //               .map((json) => LiveMatchFull.fromJson(json))
-  //               .toList();
-
-  //           _oneliveDad = matches;
-  //           print(_oneliveDad.length);
-  //         } else {
-  //           throw Exception('Invalid data format: Expected a list of matches');
-  //         }
-  //       } else {
-  //         throw Exception('Invalid data format: Missing required fields');
-  //       }
-  //     } else {
-  //       throw Exception('Failed to fetch live match');
-  //     }
-  //   } catch (error) {
-  //     print(error);
-  //     throw Exception('Failed to fetch live match');
-  //   }
-  //   notifyListeners();
-  // }
-
   fetchLiveMatchesFullData(int id) async {
     const url =
         'http://apicricketchampion.in/webservices/liveMatch/20122cd5366e30f0847774c9d7698d30';
@@ -290,7 +253,7 @@ class BlogProvider with ChangeNotifier {
   List<Blog> get blogMatches => _dataObject;
 
   Future<void> getBlogData() async {
-    final url = Uri.parse('http://cricapi.lineofcricket.com/api/getblog');
+    final url = Uri.parse('http://cricapi.mycricketline.com/api/getblog');
 
     try {
       final response = await http.get(url);
@@ -378,13 +341,6 @@ class ScorerProvider with ChangeNotifier {
 
         if (data['status'] == true && data['data'] != null) {
           if (data != null) {
-            // final List<BatsmanData> batsman =
-            //     (data['data']["scorecard"]["1"]["batsman"] as List<dynamic>)
-            //         .map((json) => BatsmanData.fromJson(json))
-            //         .toList();
-            // _scorerProvider = batsman;
-
-////////////////////////////////////////////
             final inning = ScoreData.fromJson(data as Map<String, dynamic>);
 
             _scorerData = inning;

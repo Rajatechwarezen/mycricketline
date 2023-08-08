@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mycricketline/AipProvider/upcomingapi.dart';
 import 'package:provider/provider.dart';
 
+import '../../../AipProvider/ThemeProvider.dart';
 import '../../../utils/Color.dart';
 import '../../../utils/CustomWidget/Countdown.dart';
 import '../../../utils/CustomWidget/Dotetext.dart';
@@ -20,6 +21,8 @@ class TrendingByupcoming extends StatefulWidget {
 
 class _TrendingByupcomingState extends State<TrendingByupcoming> {
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     final screenWidth = MediaQuery.of(context).size.width;
 
     final trendingUpcoming1 = Provider.of<UpcomingMatchesProvider>(context);
@@ -55,7 +58,9 @@ class _TrendingByupcomingState extends State<TrendingByupcoming> {
                   margin:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: themeProvider.isDarkTheme
+                        ? CustomColor.cricketWhite
+                        : CustomColor.cricketBlackColor,
                     border: border,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [boxshadow],
@@ -94,8 +99,8 @@ class _TrendingByupcomingState extends State<TrendingByupcoming> {
                           ],
                         ),
                       ),
-                      const Divider(
-                        color: Cricket_textColorSecondary,
+                      Divider(
+                        color: CustomColor.cricketTextColorSecondary,
                         thickness: 1,
                       ),
                       // Row of team 1
@@ -125,8 +130,8 @@ class _TrendingByupcomingState extends State<TrendingByupcoming> {
                           sizeboxSmallw,
                         ],
                       ),
-                      const Divider(
-                        color: Cricket_textColorSecondary,
+                      Divider(
+                        color: CustomColor.cricketTextColorSecondary,
                         thickness: 1,
                       ),
                       Row(
@@ -141,8 +146,8 @@ class _TrendingByupcomingState extends State<TrendingByupcoming> {
                                   padding:
                                       const EdgeInsets.only(left: 10, top: 10),
                                   child: Container(
+                                    width: 100,
                                     decoration: BoxDecoration(
-                                      color: Cricket_Gradient_color1,
                                       borderRadius:
                                           CustomStylesBorder.boderRadius10,
                                       border: border,

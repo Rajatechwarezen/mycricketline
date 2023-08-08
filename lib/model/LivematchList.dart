@@ -80,7 +80,8 @@ class LiveMatch2 {
   final String teamAShort;
   final String teamAImg;
   final String venue;
-
+  final dynamic min;
+  final dynamic max;
   final String teamAScore;
   final String teamAOver;
   final String teamB;
@@ -88,29 +89,35 @@ class LiveMatch2 {
   final String teamBImg;
   final String teamBScore;
   final String teamBOver;
+  final String favTeam;
 
-  LiveMatch2({
-    required this.matchId,
-    required this.series,
-    required this.venue,
-    required this.matchDate,
-    required this.matchTime,
-    required this.matchType,
-    required this.matchStatus,
-    required this.teamA,
-    required this.teamAShort,
-    required this.teamAImg,
-    required this.teamAScore,
-    required this.teamAOver,
-    required this.teamB,
-    required this.teamBShort,
-    required this.teamBImg,
-    required this.teamBScore,
-    required this.teamBOver,
-  });
+  LiveMatch2(
+      {required this.matchId,
+      required this.series,
+      required this.venue,
+      required this.matchDate,
+      required this.matchTime,
+      required this.matchType,
+      required this.matchStatus,
+      required this.teamA,
+      required this.teamAShort,
+      required this.teamAImg,
+      required this.teamAScore,
+      required this.teamAOver,
+      required this.teamB,
+      required this.teamBShort,
+      required this.teamBImg,
+      required this.teamBScore,
+      required this.teamBOver,
+      required this.max,
+      required this.min,
+      required this.favTeam});
 
   factory LiveMatch2.fromJson(Map<String, dynamic> json) {
     return LiveMatch2(
+      favTeam: json["fav_team"] ?? "-",
+      min: json["min_rate"] ?? "0",
+      max: json['max_rate'] ?? "0",
       matchId: json['match_id'],
       venue: json['venue'],
       series: json['series'],

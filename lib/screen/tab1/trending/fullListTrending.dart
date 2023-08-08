@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../../AipProvider/LiveMatch.dart';
 
+import '../../../AipProvider/ThemeProvider.dart';
 import '../../../utils/CustomWidget/TitleBtn.dart';
 import 'fullviewTrending.dart';
 
@@ -20,13 +21,17 @@ class FullTrending extends StatefulWidget {
 class _FullTrendingState extends State<FullTrending> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     final seriesdata = Provider.of<SeriesProvider>(context);
     final screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-            backgroundColor: Cricket_white,
-            iconTheme: const IconThemeData(color: Colors.black),
+            backgroundColor: themeProvider.isDarkTheme
+                ? CustomColor.cricketWhite
+                : CustomColor.cricketBlackColor,
+            iconTheme: IconThemeData(color: CustomColor.cricketBlackColor),
             elevation: 0,
             title: Center(
                 child: Text(
@@ -53,6 +58,7 @@ class _FullTrendingState extends State<FullTrending> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => TrendingView(
+                                            trendingViewName: myseries.series,
                                             matchid: myseries.seriesId)),
                                   );
                                 },
@@ -63,7 +69,9 @@ class _FullTrendingState extends State<FullTrending> {
                                       left: 10, right: 10, top: 10),
                                   padding: const EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: themeProvider.isDarkTheme
+                                          ? CustomColor.cricketWhite
+                                          : CustomColor.cricketBlackColor,
                                       boxShadow: [boxshadow],
                                       borderRadius:
                                           CustomStylesBorder.boderRadius10),

@@ -7,6 +7,7 @@ import '../../../model/Allmodel.dart';
 import '../../../utils/CustomWidget/Dotetext.dart';
 import '../../../utils/CustomWidget/TitleBtn.dart';
 import '../../../utils/CustomWidget/shimmer.dart';
+import '../../../utils/Style.dart';
 import '../News/NewsContent.dart';
 import 'BlogFull.dart';
 
@@ -51,7 +52,7 @@ class _BlogsState extends State<Blogs> {
         _isLoading = true;
       });
 
-      final url = 'http://cricapi.lineofcricket.com/api/getblog';
+      final url = 'http://cricapi.mycricketline.com/api/getblog';
 
       try {
         final response = await http.get(Uri.parse(url));
@@ -104,7 +105,7 @@ class _BlogsState extends State<Blogs> {
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
                   image: NetworkImage(
-                      'http://cricapi.lineofcricket.com/uploads/blogimg/${news.blImg}'),
+                      'http://cricapi.mycricketline.com/uploads/blogimg/${news.blImg}'),
                   fit: BoxFit.fill,
                 ),
               ),
@@ -126,6 +127,8 @@ class _BlogsState extends State<Blogs> {
       scrollDirection: Axis.vertical,
       child: Column(
         children: [
+          sizeboxSmallh,
+          Divider(),
           newstitlebtn(
             context1: context,
             HeadName: 'Blog  ',

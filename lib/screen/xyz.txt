@@ -1,0 +1,171 @@
+
+        Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 50,
+                                          width: 50,
+                                          margin: const EdgeInsets.only(
+                                              top: 5, left: 10, right: 10),
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            borderRadius: CustomStylesBorder
+                                                .borderRadiusfull,
+                                            border: border,
+                                            image: DecorationImage(
+                                              image:
+                                                  NetworkImage(detail.teamAImg),
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 50,
+                                          width: 50,
+                                          margin: const EdgeInsets.only(
+                                              top: 5, left: 10, right: 10),
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            borderRadius: CustomStylesBorder
+                                                .borderRadiusfull,
+                                            border: border,
+                                            image: DecorationImage(
+                                              image:
+                                                  NetworkImage(detail.teamBImg),
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                // Positioned(
+                                //   top: 40,
+                                //   left: 190,
+                                //   child: detail.matchStatus == "Upcoming"
+                                //       ? Container(
+                                //           decoration: BoxDecoration(
+                                //               color: const Color.fromRGBO(
+                                //                   167, 40, 23, 1),
+                                //               borderRadius: CustomStylesBorder
+                                //                   .boderRadius10),
+                                //           child: CountdownTimerWidget(
+                                //               totalSeconds: remainingSeconds),
+                                //         )
+                                //       : const Text(""),
+                                // ),
+                                Positioned(
+                                    top: 10,
+                                    left: 70,
+                                    child: Container(
+                                      height: 100,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Column(children: [
+                                            Text(
+                                              detail.teamAShort,
+                                              style: CustomStyles
+                                                  .cardBoldDarkDrawerTextStyle,
+                                            ),
+                                            Text(
+                                              checkChange()[0],
+                                              style:
+                                                  CustomStyles.cardTextStyle2,
+                                            ),
+                                          ]),
+                                          Column(children: [
+                                            Text(
+                                              detail.teamBShort,
+                                              style: CustomStyles
+                                                  .cardBoldDarkDrawerTextStyle,
+                                            ),
+                                            Text(
+                                              checkChange()[1],
+                                              style:
+                                                  CustomStyles.cardTextStyle2,
+                                            ),
+                                          ]),
+                                        ],
+                                      ),
+                                    )),
+
+
+
+
+
+
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: screenWidth * 0.9,
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              CustomStylesBorder.boderRadius10,
+                                          color: CustomColor.cricketBlackColor
+                                              .withOpacity(0.5),
+                                        ),
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(children: [
+                                                Text(
+                                                  detail.matchStatus,
+                                                  style: CustomStyles
+                                                      .smallLightTextStylebold,
+                                                ),
+                                                Text(
+                                                  detail.series,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: CustomStyles
+                                                      .smallLightTextStyle,
+                                                ),
+                                              ]),
+                                            ]),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+
+
+
+                                
+                                Positioned(
+                                    top: 0,
+                                    right: 10,
+                                    child: Container(
+                                        alignment: Alignment.center,
+                                        width: screenWidth * 0.3,
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            color: colorChange(),
+                                            borderRadius: CustomStylesBorder
+                                                .boderRadius10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.play_arrow,
+                                              size: 10,
+                                              color: themeProvider.isDarkTheme
+                                                  ? CustomColor.cricketWhite
+                                                  : CustomColor
+                                                      .cricketBlackColor,
+                                            ),
+                                            Text(
+                                              detail.matchStatus,
+                                              style: CustomStyles.cardTextStyle,
+                                            ),
+                                          ],
+                                        ))),
+                           

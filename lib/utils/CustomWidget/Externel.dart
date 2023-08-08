@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
+import '../../AipProvider/ThemeProvider.dart';
 import '../Color.dart';
 import '../Style.dart';
 
@@ -21,9 +24,10 @@ smallboxRed(value) {
     decoration: BoxDecoration(
       borderRadius: CustomStylesBorder.boderRadius10,
       border: border,
-      color: Cricket_Gradient_color1,
+      color: CustomColor.cricketGradientColor1,
     ),
-    child: Text(value.toString(), style: CustomStyles.cardTextStyle),
+    child: Text(value.toString(),
+        style: CustomStyles.cardTextStyle(CustomColor.cricketWhite)),
   );
 }
 
@@ -37,7 +41,7 @@ smallboxblue(value) {
     decoration: BoxDecoration(
       borderRadius: CustomStylesBorder.boderRadius10,
       border: border,
-      color: Cricket_Primary,
+      color: CustomColor.cricketPrimary,
     ),
     child: Text(value.toString(), style: CustomStyles.smallTextStyle),
   );
@@ -53,7 +57,7 @@ smallboxRedScore(value) {
     decoration: BoxDecoration(
       borderRadius: CustomStylesBorder.boderRadius10,
       border: border,
-      color: Cricket_Gradient_color1,
+      color: CustomColor.cricketGradientColor1,
     ),
     child: Text(value.toString(), style: CustomStyles.smallTextStyle),
   );
@@ -69,7 +73,7 @@ smallboxRedScore2(value) {
     decoration: BoxDecoration(
       borderRadius: CustomStylesBorder.boderRadius10,
       border: border,
-      color: Cricket_textColorSecondary,
+      color: CustomColor.cricketTextColorSecondary,
     ),
     child: Text(value.toString(), style: CustomStyles.smallTextStyle2),
   );
@@ -85,25 +89,55 @@ ScoresBox(value, ScoreType) {
     decoration: BoxDecoration(
       borderRadius: CustomStylesBorder.boderRadius5,
       border: border,
-      color: ScoreType == "A" ? Cricket_Gradient_color1 : Cricket_Primary,
+      color: ScoreType == "A"
+          ? CustomColor.cricketGradientColor1
+          : CustomColor.cricketPrimary,
     ),
     child: Text(value.toString(),
-        style: const TextStyle(
-            fontSize: 20, fontWeight: FontWeight.w600, color: Cricket_white)),
+        style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: CustomColor.cricketWhite)),
   );
 }
 
 customboxbutton2(inningKey) {
   return Container(
       decoration: BoxDecoration(
-          color: Cricket_Primary,
-          border: border,
-          boxShadow: [boxshadow],
-          borderRadius: CustomStylesBorder.borderRadius20),
+        color: CustomColor.cricketPrimary,
+        border: border,
+      ),
       margin: const EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 5),
-      padding: const EdgeInsets.only(left: 40, right: 40, top: 20, bottom: 20),
-      child: Text(
-        inningKey,
-        style: CustomStyles.cardBoldDarkTextStyleWhite,
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            inningKey,
+            style: CustomStyles.cardBoldDarkTextStyleWhite,
+          ),
+          Icon(
+            Icons.arrow_circle_down,
+            color: CustomColor.cricketWhite,
+          )
+        ],
       ));
+}
+
+class DarkModeToggle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+
+    return InkWell(
+      onTap: () => themeProvider.toggleTheme(),
+      child: Image(
+        image: themeProvider.isDarkTheme
+            ? const AssetImage('images/dark_mode.png')
+            : const AssetImage('images/light_mode.png'),
+        width: 35,
+        height: 35,
+      ),
+    );
+  }
 }

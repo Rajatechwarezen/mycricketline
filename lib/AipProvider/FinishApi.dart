@@ -92,12 +92,12 @@ class FinishMatchesProvider with ChangeNotifier {
   Future<List<ImageShotData>> ShortData() async {
     try {
       final url =
-          Uri.parse('http://cricapi.lineofcricket.com/api/getactiveshorts');
+          Uri.parse('http://cricapi.mycricketline.com/api/getactiveshorts');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        print(data);
+
         final List<ImageShotData> matches = (data['data'] as List<dynamic>)
             .map((json) => ImageShotData.fromJson(json))
             .toList();

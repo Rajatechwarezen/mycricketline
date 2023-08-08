@@ -1,4 +1,14 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:provider/provider.dart';
+
+import '../../AipProvider/FinishApi.dart';
+import '../../model/FinishData.dart';
+import '../../model/TermAndConditionData.dart';
+import '../../utils/CustomWidget/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -7,171 +17,147 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  TabController? _tabController;
+  late TabController _tabController;
+  List<ImageShotData> items = [];
+  bool _dataFetched = false;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: items.length, vsync: this);
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    // Check if data has been fetched already to avoid redundant fetch
+    if (!_dataFetched) {
+      final shortMatches = Provider.of<FinishMatchesProvider>(context);
+      items = await shortMatches.ShortData(); // Await the data fetch
+      _dataFetched = true; // Mark data as fetched
+
+      // Initialize TabController with the correct length after data is fetched
+      _tabController = TabController(length: items.length, vsync: this);
+
+      // Verify if the data fetched has all 34 items
+      if (items.length != 34) {
+        // Show a loading spinner while waiting for data
+        Center(
+          child: summer,
+        );
+      }
+    }
   }
 
   @override
   void dispose() {
-    _tabController!.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: getBody(),
-    );
-  }
+    if (!_dataFetched) {
+      // Show a loading spinner while waiting for data
+      return Scaffold(
+        body: Center(
+          child: summer,
+        ),
+      );
+    }
 
-  Widget getBody() {
-    var size = MediaQuery.of(context).size;
-    return RotatedBox(
-      quarterTurns: 1,
-      child: TabBarView(
-        controller: _tabController,
-        children: List.generate(items.length, (index) {
-          return VideoPlayerItem(
-            imageUrl: items[index]['imageUrl']!,
-            size: size,
-            name: items[index]!['name']!,
-            caption: items[index]['caption']!,
-            songName: items[index]['songName']!,
-            profileImg: items[index]['profileImg']!,
-            likes: items[index]['likes']!,
-            comments: items[index]['comments']!,
-            shares: items[index]['shares']!,
-            albumImg: items[index]['albumImg']!,
-          );
-        }),
+    return Scaffold(
+      body: RotatedBox(
+        quarterTurns: 1,
+        child: TabBarView(
+          controller: _tabController,
+          children: items.map((item) => ReelVideoItem(item: item)).toList(),
+        ),
       ),
     );
   }
 }
 
-class VideoPlayerItem extends StatefulWidget {
-  final String imageUrl;
-  final String name;
-  final String caption;
-  final String songName;
-  final String profileImg;
-  late final String likes;
-  final String comments;
-  final String shares;
-  final String albumImg;
-  final Size size;
+class ReelVideoItem extends StatefulWidget {
+  final ImageShotData item;
 
-  VideoPlayerItem({
-    required this.imageUrl,
-    required this.size,
-    required this.name,
-    required this.caption,
-    required this.songName,
-    required this.profileImg,
-    required this.likes,
-    required this.comments,
-    required this.shares,
-    required this.albumImg,
-  });
+  ReelVideoItem({required this.item});
 
   @override
-  _VideoPlayerItemState createState() => _VideoPlayerItemState();
+  _ReelVideoItemState createState() => _ReelVideoItemState();
 }
 
-class _VideoPlayerItemState extends State<VideoPlayerItem> {
+class _ReelVideoItemState extends State<ReelVideoItem> {
   bool isShowPlaying = false;
-
-  Widget isPlaying() {
-    return isShowPlaying
-        ? Container()
-        : Icon(
-            Icons.play_arrow,
-            size: 80,
-            color: Colors.white.withOpacity(0.5),
-          );
+  late int itemId;
+  @override
+  void initState() {
+    setState(() {
+      itemId = widget.item.id;
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        setState(() {
-          isShowPlaying = !isShowPlaying;
-        });
-      },
       child: RotatedBox(
         quarterTurns: -1,
         child: Container(
-          height: widget.size.height,
-          width: widget.size.width,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           child: Stack(
             children: <Widget>[
               Container(
-                height: widget.size.height,
-                width: widget.size.width,
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(color: Colors.black),
                 child: Stack(
                   children: <Widget>[
-                    Image.network(
-                      widget.imageUrl,
-                      fit: BoxFit.cover,
-                    ),
-                    Center(
-                      child: Container(
-                        decoration: BoxDecoration(),
-                        child: isPlaying(),
+                    Container(
+                      height: 800,
+                      width: 400,
+                      margin: const EdgeInsets.only(top: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: NetworkImage(Uri.parse(
+                                  'http://cricapi.mycricketline.com/uploads/shorts/${widget.item.image}')
+                              .toString()),
+                          fit: BoxFit.fitHeight,
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                height: widget.size.height,
-                width: widget.size.width,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 15,
-                    top: 20,
-                    bottom: 10,
-                    right: 15,
-                  ),
-                  child: SafeArea(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        HeaderHomePage(),
-                        Expanded(
-                          child: Row(
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 15,
+                          top: 20,
+                          bottom: 10,
+                          right: 15,
+                        ),
+                        child: SafeArea(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              LeftPanel(
-                                size: widget.size,
-                                name: widget.name,
-                                caption: widget.caption,
-                                songName: widget.songName,
+                              Expanded(
+                                child: Row(
+                                  children: <Widget>[
+                                    LeftPanel(
+                                      item: widget.item,
+                                    ),
+                                    RightPanel(item: widget.item, id: itemId),
+                                  ],
+                                ),
                               ),
-                              GestureDetector(
-                                  onTap: () {
-                                    // Handle the tap event for RightPanel
-                                    print('RightPanel tapped!');
-                                  },
-                                  child: RightPanel(
-                                    size: widget.size,
-                                    likes: widget.likes,
-                                    comments: widget.comments,
-                                    shares: widget.shares,
-                                    profileImg: widget.profileImg,
-                                    albumImg: widget.albumImg,
-                                  )),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ],
@@ -182,57 +168,22 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   }
 }
 
-class HeaderHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 10),
-      child: Row(
-        children: [
-          Icon(
-            Icons.camera_alt,
-            size: 25,
-            color: Colors.white,
-          ),
-          const SizedBox(width: 10),
-          Text(
-            'Home',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class LeftPanel extends StatelessWidget {
-  final Size size;
-  final String name;
-  final String caption;
-  final String songName;
+  final ImageShotData item;
 
-  LeftPanel({
-    required this.size,
-    required this.name,
-    required this.caption,
-    required this.songName,
-  });
+  LeftPanel({required this.item});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        height: size.height,
+        height: MediaQuery.of(context).size.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              name,
+            const Text(
+              "",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -241,7 +192,7 @@ class LeftPanel extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             Text(
-              caption,
+              "",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14,
@@ -249,7 +200,7 @@ class LeftPanel extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             Text(
-              songName,
+              "",
               style: TextStyle(
                 color: Colors.white.withOpacity(0.8),
                 fontSize: 12,
@@ -263,120 +214,130 @@ class LeftPanel extends StatelessWidget {
 }
 
 class RightPanel extends StatefulWidget {
-  final Size size;
-  String likes;
-  final String comments;
-  final String shares;
-  final String profileImg;
-  final String albumImg;
-
-  RightPanel({
-    required this.size,
-    required this.likes,
-    required this.comments,
-    required this.shares,
-    required this.profileImg,
-    required this.albumImg,
-  });
+  final ImageShotData item;
+  final int id;
+  const RightPanel({required this.item, required this.id});
 
   @override
   State<RightPanel> createState() => _RightPanelState();
 }
 
 class _RightPanelState extends State<RightPanel> {
-  void increaseLikes() {
-    setState(() {
-      int likeCount = int.tryParse(widget.likes) ?? 0;
-      likeCount++;
-      widget.likes = likeCount.toString();
+  bool isButtonDisabled = false; // Track whether the button is disabled or not
+  final LocalStorage storage = LocalStorage('like_button_storage');
+  dynamic userLikeCount;
+  late List userLikeId = [];
+  @override
+  void initState() {
+    super.initState();
+    storage.ready.then((_) {
+      setState(() {
+        isButtonDisabled = storage.getItem('isButtonDisabled') ?? false;
+        userLikeId = storage.getItem('userLikeId') ?? [];
+        userLikeCount = widget.item.userslike;
+      });
     });
+  }
+
+  Future<void> LikeIncreese(id, int userlike) async {
+    const url = 'http://cricapi.mycricketline.com/api/updatelike';
+    print("--------------------$id");
+    final data = {'id': id, "userslike": userlike + 1};
+
+    final jsonData = json.encode(data);
+
+    final headers = {
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response =
+          await http.post(Uri.parse(url), headers: headers, body: jsonData);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          if (!userLikeId.contains(id)) {
+            userLikeCount = userlike + 1;
+            isButtonDisabled = true;
+            userLikeId.add(id);
+            storage.setItem('userLikeId', userLikeId);
+            storage.setItem('isButtonDisabled', isButtonDisabled);
+          } else {
+            userLikeCount = userlike - 1;
+            isButtonDisabled = false;
+            userLikeId.remove(id);
+            storage.setItem('userLikeId', userLikeId);
+            storage.setItem('isButtonDisabled', isButtonDisabled);
+          }
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: widget.size.height,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          CircleAvatar(
-            backgroundImage: NetworkImage(widget.profileImg),
-            radius: 25,
-          ),
-          getIcons(
-            Icons.favorite_border,
-            widget.likes,
-            35.0,
-            increaseLikes,
-          ),
-          getIcons(
-              Icons.chat_bubble_outline, widget.comments, 35.0, increaseLikes),
-          getIcons(Icons.reply_outlined, widget.shares, 25.0, increaseLikes),
-          CircleAvatar(
-            backgroundImage: NetworkImage(widget.albumImg),
-            radius: 25,
-          ),
-        ],
+    return Expanded(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height / 3,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                LikeIncreese(widget.id, widget.item.userslike);
+              },
+              child: FutureBuilder(
+                future: Future.delayed(Duration.zero),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return getIcons(Icons.favorite_border,
+                        userLikeCount.toString(), 35.0, Colors.red);
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return getIcons(
+                        isButtonDisabled
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        userLikeCount.toString(),
+                        35.0,
+                        Colors.red);
+                  }
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            getIcons(Icons.reply_outlined, widget.item.usershare.toString(),
+                25.0, Colors.white),
+          ],
+        ),
       ),
     );
   }
 }
 
-Widget getIcons(IconData icon, String count, double size, VoidCallback onTap) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Column(
-      children: [
-        Icon(
-          icon,
+Widget getIcons(IconData icon, String count, double size, colors) {
+  return Column(
+    children: [
+      Icon(
+        icon,
+        color: colors,
+        size: size,
+      ),
+      Text(
+        count,
+        style: const TextStyle(
           color: Colors.white,
-          size: size,
+          fontSize: 14,
         ),
-        const SizedBox(height: 5),
-        Text(
-          count,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-          ),
-        ),
-      ],
-    ),
+      ),
+    ],
   );
 }
-
-List<Map<String?, String?>> items = [
-  {
-    'imageUrl': 'https://via.placeholder.com/400x300',
-    'name': 'User 1',
-    'caption': 'Caption 1',
-    'songName': 'Song 1',
-    'profileImg': 'https://via.placeholder.com/50x50',
-    'likes': '100',
-    'comments': '50',
-    'shares': '30',
-    'albumImg': 'https://via.placeholder.com/50x50',
-  },
-  {
-    'imageUrl': 'https://via.placeholder.com/400x300',
-    'name': 'User 2',
-    'caption': 'Caption 2',
-    'songName': 'Song 2',
-    'profileImg': 'https://via.placeholder.com/50x50',
-    'likes': '200',
-    'comments': '70',
-    'shares': '40',
-    'albumImg': 'https://via.placeholder.com/50x50',
-  },
-  {
-    'imageUrl': 'https://via.placeholder.com/400x300',
-    'name': 'User 3',
-    'caption': 'Caption 3',
-    'songName': 'Song 3',
-    'profileImg': 'https://via.placeholder.com/50x50',
-    'likes': '150',
-    'comments': '60',
-    'shares': '20',
-    'albumImg': 'https://via.placeholder.com/50x50',
-  },
-];

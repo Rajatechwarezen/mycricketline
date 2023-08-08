@@ -84,7 +84,7 @@ class FinishData {
 class ImageShotData {
   final dynamic id;
   final dynamic image;
-  final dynamic userslike;
+  late final dynamic userslike;
   final dynamic usershare;
   final dynamic userstatus;
 

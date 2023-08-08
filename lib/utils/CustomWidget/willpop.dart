@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mycricketline/utils/Color.dart';
+import 'package:provider/provider.dart';
+
+import '../../AipProvider/ThemeProvider.dart';
 
 class WillPopWidget extends StatelessWidget {
   final Widget child;
@@ -26,35 +29,46 @@ class WillPopWidget extends StatelessWidget {
 }
 
 showExitDialog(BuildContext context) async {
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
   return showDialog<bool>(
     context: context,
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        backgroundColor: Cricket_Primary,
+        backgroundColor: CustomColor.cricketPrimary,
         contentTextStyle: TextStyle(
-          color: Colors.white,
+          color: themeProvider.isDarkTheme
+              ? CustomColor.cricketWhite
+              : CustomColor.cricketBlackColor,
           fontFamily: 'Lora',
           fontWeight: FontWeight.w400,
           fontSize: 10,
         ),
-        content: const Text(
+        content: Text(
           "Are you sure you want to exit?",
-          style: TextStyle(color: Colors.white, fontSize: 20),
+          style: TextStyle(
+              color: themeProvider.isDarkTheme
+                  ? CustomColor.cricketWhite
+                  : CustomColor.cricketBlackColor,
+              fontSize: 20),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: Text(
               "No",
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(
+                  color: themeProvider.isDarkTheme
+                      ? CustomColor.cricketWhite
+                      : CustomColor.cricketBlackColor),
             ),
           ),
           TextButton(
             onPressed: () => SystemNavigator.pop(),
             child: Text(
               "Yes",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: CustomColor.cricketWhite),
             ),
           ),
         ],

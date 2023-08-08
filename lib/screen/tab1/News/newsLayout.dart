@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../AipProvider/ThemeProvider.dart';
 import '../../../model/newData.dart';
+import '../../../utils/Color.dart';
 import '../../../utils/Style.dart';
 
 // ignore: must_be_immutable
@@ -11,15 +14,19 @@ class NewsLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: themeProvider.isDarkTheme
+            ? CustomColor.cricketWhite
+            : CustomColor.cricketBlackColor,
         title: Text(
           newsData.title,
           style: CustomStyles.cardBoldDarkDrawerTextStyle,
         ),
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: CustomColor.cricketBlackColor),
       ),
       body: SingleChildScrollView(
         child: Column(

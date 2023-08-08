@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:mycricketline/utils/Color.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../AipProvider/ThemeProvider.dart';
 import '../../../../AipProvider/oddsApi.dart';
 import '../../../../model/OddsData.dart';
 import '../../../../utils/CustomWidget/Externel.dart';
@@ -33,6 +34,8 @@ class _OddsState extends State<Odds> {
   Widget build(BuildContext context) {
     var cricketMatchOdds = Provider.of<OddsApiProvider>(context);
 
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     cricketMatchOdds.matchOdds(idMatch: widget.idMatch);
     List<CricketMatchOdds>? _currentMatch = cricketMatchOdds.cricketMatchOdds;
 
@@ -43,8 +46,10 @@ class _OddsState extends State<Odds> {
         children: [
           InkWell(
             onTap: _toggleInning,
-            child: customboxbutton2(
-                _isFirstInning ? 'Second Inning' : 'First Inning'),
+            child: _currentMatch != null
+                ? customboxbutton2(
+                    _isFirstInning ? 'Second Inning' : 'First Inning')
+                : null,
           ),
           SizedBox(height: 16),
           _currentMatch != null
@@ -54,7 +59,9 @@ class _OddsState extends State<Odds> {
                       margin: EdgeInsets.only(top: 10, left: 5, right: 5),
                       padding: EdgeInsets.only(top: 10, left: 5, right: 5),
                       decoration: BoxDecoration(
-                        color: Cricket_white,
+                        color: themeProvider.isDarkTheme
+                            ? CustomColor.cricketWhite
+                            : CustomColor.cricketBlackColor,
                         border: border,
                         borderRadius: CustomStylesBorder.boderRadius10,
                         boxShadow: [boxshadow],
@@ -74,7 +81,8 @@ class _OddsState extends State<Odds> {
                                           width: 30,
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                              color: Cricket_BlackColor3,
+                                              color: CustomColor
+                                                  .cricketBlackColor3,
                                               borderRadius: CustomStylesBorder
                                                   .borderRadiusfull),
                                           child: Text(
@@ -175,7 +183,8 @@ class _OddsState extends State<Odds> {
                     );
                   }).toList(),
                 )
-              : summer,
+              // ignore: unrelated_type_equality_checks
+              : summer2
         ],
       ),
     );

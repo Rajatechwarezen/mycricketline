@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mycricketline/AipProvider/upcomingapi.dart';
 import 'package:provider/provider.dart';
 
+import '../../AipProvider/ThemeProvider.dart';
+import '../../model/upcomingData.dart';
 import '../../utils/Color.dart';
 import '../../utils/CustomWidget/Countdown.dart';
 import '../../utils/CustomWidget/Dotetext.dart';
@@ -21,9 +23,14 @@ class Upcomings extends StatefulWidget {
 }
 
 class _UpcomingsState extends State<Upcomings> {
+  int _currentIndex = 0;
+  final int _batchSize = 5;
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     final upcommingMatchProvider =
         Provider.of<UpcomingMatchesProvider>(context);
@@ -38,9 +45,10 @@ class _UpcomingsState extends State<Upcomings> {
         child: Scaffold(
           appBar: widget.lengthType.toString().contains("Full")
               ? AppBar(
-                  iconTheme: const IconThemeData(color: Colors.black),
+                  iconTheme:
+                      IconThemeData(color: CustomColor.cricketBlackColor),
                   elevation: 0,
-                  backgroundColor: Cricket_app_Background,
+                  backgroundColor: CustomColor.cricketAppBackground,
                   title: Center(
                       child: Text(
                     "Upcoming",
@@ -48,10 +56,13 @@ class _UpcomingsState extends State<Upcomings> {
                   )))
               : null,
           body: ListView(
-            children: matches.map((match) {
+            children: matches.asMap().entries.map((match1) {
+              int index = match1.key;
+              Upcomingdata match = match1.value;
               final matchDateTime = parseMatchDateTime(
                   match.matchDate.toString(), match.matchTime.toString());
               final remainingSeconds = calculateRemainingSeconds(matchDateTime);
+
               return InkWell(
                 onTap: () {
                   Navigator.push(
@@ -60,7 +71,7 @@ class _UpcomingsState extends State<Upcomings> {
                         builder: (context) => OnlinelineLiveTabTab(
                               idMatch: match.matchId,
                               type: "Upcoming",
-                              data: const ["---", "---", "---", "---"],
+                              data: const ["", "", "", ""],
                             )),
                   );
                 },
@@ -70,7 +81,9 @@ class _UpcomingsState extends State<Upcomings> {
                   margin:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: themeProvider.isDarkTheme
+                        ? CustomColor.cricketWhite
+                        : CustomColor.cricketBlackColor,
                     border: border,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [boxshadow],
@@ -81,36 +94,35 @@ class _UpcomingsState extends State<Upcomings> {
                         padding: const EdgeInsets.only(left: 10, top: 5),
                         child: Row(
                           children: [
-                            Text(
-                              '•Upcoming',
-                              style: CustomStyles.livefont,
-                            ),
                             sizeboxSmallw,
                             Expanded(
                                 flex: 1,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Text(
+                                      'Upcoming',
+                                      style: CustomStyles.livefont,
+                                    ),
                                     Text(
                                       truncateText(match.series.toString(), 30),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(fontSize: 9),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: Text(
-                                          "${match.matchTime.toString()} : ${match.matchDate.toString()}"),
-                                    )
                                   ],
-                                ))
+                                )),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                  "${match.matchTime.toString()} : ${match.matchDate.toString()}"),
+                            ),
                           ],
                         ),
                       ),
-                      const Divider(
-                        color: Cricket_textColorSecondary,
+                      Divider(
+                        color: CustomColor.cricketTextColorSecondary,
                         thickness: 1,
                       ),
                       // Row of team 1
@@ -120,56 +132,132 @@ class _UpcomingsState extends State<Upcomings> {
                           Expanded(
                             flex: 3,
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                teamheadingscore2(
-                                    teamAImg: match.teamAImage,
-                                    teamBImg: match.teamBImage,
-                                    teamName: match.teamAShort,
-                                    teamName2: match.teamBShort,
-                                    teamScore: "-",
-                                    teamScore2: "-",
-                                    teamOver: '-',
-                                    teamType: match.matchType,
-                                    matchTime: match.matchTime,
-                                    teamOver2: "-"),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                                height: 30,
+                                                width: 30,
+                                                margin: const EdgeInsets.only(
+                                                    left: 5, right: 10),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      CustomStylesBorder
+                                                          .borderRadiusfull,
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(match
+                                                        .teamAImage
+                                                        .toString()),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                )),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(match.teamA.toString(),
+                                                    style: CustomStyles
+                                                        .cardBoldTextStyle2),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                                height: 30,
+                                                width: 30,
+                                                margin: const EdgeInsets.only(
+                                                    left: 5, right: 10),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      CustomStylesBorder
+                                                          .borderRadiusfull,
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(match
+                                                        .teamBImage
+                                                        .toString()),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                )),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(match.teamB.toString(),
+                                                    style: CustomStyles
+                                                        .cardBoldTextStyle2),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
                           sizeboxSmallw,
                         ],
                       ),
-                      const Divider(
-                        color: Cricket_textColorSecondary,
+                      Divider(
+                        color: CustomColor.cricketTextColorSecondary,
                         thickness: 1,
                       ),
-                      Row(
-                        children: [
-                          Row(
-                            children: [
-                              sizeboxSmallw,
-                              //Aw -
+                      Container(
+                        margin: const EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            //Aw -
 
-                              const Text("Match Timing Left"),
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 10, top: 10),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Cricket_Gradient_color1,
-                                      borderRadius:
-                                          CustomStylesBorder.boderRadius10,
-                                      border: border,
-                                    ),
-                                    child: Center(
-                                      child: CountdownTimerWidget(
-                                          totalSeconds: remainingSeconds),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ],
+                            const Text("Match Timing Left"),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: CustomStylesBorder.boderRadius10,
+                                border: border,
+                              ),
+                              child: Center(
+                                child: CountdownTimerWidget(
+                                    totalSeconds: remainingSeconds),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Divider(
+                        color: CustomColor.cricketTextColorSecondary,
+                        thickness: 1,
                       ),
 
                       Row(

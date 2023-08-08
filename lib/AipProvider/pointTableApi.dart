@@ -18,13 +18,13 @@ class YourDataProvider with ChangeNotifier {
       var filterId = id.toString().replaceAll("\\p{P}", "");
       final request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields['series_id'] = "243";
-      print("id :====$id");
+
       final response = await request.send();
 
       if (response.statusCode == 200) {
         final responseBody = await response.stream.bytesToString();
         final data = json.decode(responseBody);
-        print(data);
+
         if (data != null && data['data'] is List) {
           final List<PointTable> pointTables = (data['data'] as List<dynamic>)
               .map((json) => PointTable.fromJson(json))

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mycricketline/model/Livematch.dart';
 import 'package:mycricketline/utils/Style.dart';
 
+import '../../../../utils/Color.dart';
+
 class MatchDetailsLayout extends StatelessWidget {
   LiveMatchFull batsmen1;
   LiveMatchFull batsmen2;
@@ -65,32 +67,38 @@ class MatchDetailsLayout extends StatelessWidget {
             ],
             rows: batsmen1.batsmen!.map(
               (batsmen) {
-                return DataRow(cells: [
-                  DataCell(Text(
-                    batsmen.name.toString(),
-                    style: CustomStyles.cardBoldDarkTextStyleblue,
-                  )),
-                  DataCell(Text(
-                    batsmen.run.toString(),
-                    style: CustomStyles.cardBoldDarkTextStyle2,
-                  )),
-                  DataCell(Text(
-                    batsmen.ball.toString(),
-                    style: CustomStyles.cardBoldDarkTextStyle2,
-                  )),
-                  DataCell(Text(
-                    batsmen.fours.toString(),
-                    style: CustomStyles.cardBoldDarkTextStyle2,
-                  )),
-                  DataCell(Text(
-                    batsmen.sixes.toString(),
-                    style: CustomStyles.cardBoldDarkTextStyle2,
-                  )),
-                  DataCell(Text(
-                    batsmen.strikeRate.toString(),
-                    style: CustomStyles.cardBoldDarkTextStyle2,
-                  )),
-                ]);
+                return DataRow(
+                    color: MaterialStateColor.resolveWith((states) {
+                      return batsmen.name.toString().contains("*")
+                          ? CustomColor.cricketDarkPrimary
+                          : Colors.transparent;
+                    }),
+                    cells: [
+                      DataCell(Text(
+                        batsmen.name.toString(),
+                        style: CustomStyles.cardBoldDarkTextStyleblue,
+                      )),
+                      DataCell(Text(
+                        batsmen.run.toString(),
+                        style: CustomStyles.cardBoldDarkTextStyle2,
+                      )),
+                      DataCell(Text(
+                        batsmen.ball.toString(),
+                        style: CustomStyles.cardBoldDarkTextStyle2,
+                      )),
+                      DataCell(Text(
+                        batsmen.fours.toString(),
+                        style: CustomStyles.cardBoldDarkTextStyle2,
+                      )),
+                      DataCell(Text(
+                        batsmen.sixes.toString(),
+                        style: CustomStyles.cardBoldDarkTextStyle2,
+                      )),
+                      DataCell(Text(
+                        batsmen.strikeRate.toString(),
+                        style: CustomStyles.cardBoldDarkTextStyle2,
+                      )),
+                    ]);
               },
             ).toList(),
           ),

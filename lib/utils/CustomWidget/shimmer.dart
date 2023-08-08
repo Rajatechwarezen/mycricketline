@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mycricketline/utils/Style.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../Color.dart';
+
 var summer = Shimmer.fromColors(
   baseColor: Color.fromARGB(255, 202, 200, 200),
   highlightColor: const Color.fromARGB(255, 245, 245, 245),
@@ -13,7 +15,7 @@ var summer = Shimmer.fromColors(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           border: Border.all(
-            color: Colors.white,
+            color: CustomColor.cricketWhite,
             width: 2.0,
           ),
         ),
@@ -29,7 +31,7 @@ var summer = Shimmer.fromColors(
                     height: 80,
                     width: 100,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: CustomColor.cricketWhite,
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
@@ -37,7 +39,7 @@ var summer = Shimmer.fromColors(
                     height: 80,
                     width: 100,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: CustomColor.cricketWhite,
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
@@ -50,7 +52,7 @@ var summer = Shimmer.fromColors(
                 width: 200,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: CustomColor.cricketWhite,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
@@ -61,7 +63,7 @@ var summer = Shimmer.fromColors(
                 width: 300,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: CustomColor.cricketWhite,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
@@ -72,7 +74,7 @@ var summer = Shimmer.fromColors(
                 width: 200,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: CustomColor.cricketWhite,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
@@ -95,7 +97,7 @@ var summerlive = Shimmer.fromColors(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           border: Border.all(
-            color: Colors.white,
+            color: CustomColor.cricketWhite,
             width: 2.0,
           ),
         ),
@@ -113,7 +115,7 @@ var summerlive = Shimmer.fromColors(
                     height: 40,
                     width: 100,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: CustomColor.cricketWhite,
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
@@ -121,7 +123,7 @@ var summerlive = Shimmer.fromColors(
                     height: 40,
                     width: 100,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: CustomColor.cricketWhite,
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
@@ -134,7 +136,7 @@ var summerlive = Shimmer.fromColors(
                 width: 200,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: CustomColor.cricketWhite,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
@@ -145,7 +147,7 @@ var summerlive = Shimmer.fromColors(
                 width: 300,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: CustomColor.cricketWhite,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
@@ -156,7 +158,7 @@ var summerlive = Shimmer.fromColors(
                 width: 200,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: CustomColor.cricketWhite,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
@@ -194,7 +196,7 @@ Widget circlesummer = Shimmer.fromColors(
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: CustomColor.cricketWhite,
           borderRadius: BorderRadius.circular(100),
         ),
       ),
@@ -207,7 +209,7 @@ textlinesimmer300() {
     width: 300,
     height: 10,
     decoration: BoxDecoration(
-      color: Colors.white,
+      color: CustomColor.cricketWhite,
       borderRadius: BorderRadius.circular(8.0),
     ),
   );
@@ -218,7 +220,7 @@ textlinesimmer200() {
     width: 200,
     height: 10,
     decoration: BoxDecoration(
-      color: Colors.white,
+      color: CustomColor.cricketWhite,
       borderRadius: BorderRadius.circular(8.0),
     ),
   );
@@ -229,7 +231,7 @@ textlinesimmer100() {
     width: 100,
     height: 10,
     decoration: BoxDecoration(
-      color: Colors.white,
+      color: CustomColor.cricketWhite,
       borderRadius: BorderRadius.circular(8.0),
     ),
   );
@@ -240,7 +242,7 @@ fullBox() {
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(20.0),
       border: Border.all(
-        color: Colors.white,
+        color: CustomColor.cricketWhite,
         width: 2.0,
       ),
     ),

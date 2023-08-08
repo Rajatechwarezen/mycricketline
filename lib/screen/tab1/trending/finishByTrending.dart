@@ -3,6 +3,7 @@ import 'package:mycricketline/model/FinishData.dart';
 import 'package:provider/provider.dart';
 
 import '../../../AipProvider/FinishApi.dart';
+import '../../../AipProvider/ThemeProvider.dart';
 import '../../../utils/Color.dart';
 import '../../../utils/CustomWidget/Dotetext.dart';
 import '../../../utils/CustomWidget/shimmer.dart';
@@ -35,6 +36,8 @@ class _TrendingByfinishState extends State<TrendingByfinish>
   }
 
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     final screenWidth = MediaQuery.of(context).size.width;
 
     final matchesBySeriesFinish1 = Provider.of<FinishMatchesProvider>(context);
@@ -72,7 +75,9 @@ class _TrendingByfinishState extends State<TrendingByfinish>
                   margin:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Cricket_white,
+                    color: themeProvider.isDarkTheme
+                        ? CustomColor.cricketWhite
+                        : CustomColor.cricketBlackColor,
                     border: border,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [boxshadow],
@@ -112,8 +117,8 @@ class _TrendingByfinishState extends State<TrendingByfinish>
                           ],
                         ),
                       ),
-                      const Divider(
-                        color: Cricket_textColorSecondary,
+                      Divider(
+                        color: CustomColor.cricketTextColorSecondary,
                         thickness: 1,
                       ),
                       // Row of team 1
@@ -144,8 +149,8 @@ class _TrendingByfinishState extends State<TrendingByfinish>
                         ],
                       ),
 
-                      const Divider(
-                        color: Cricket_textColorSecondary,
+                      Divider(
+                        color: CustomColor.cricketTextColorSecondary,
                         thickness: 1,
                       ),
 

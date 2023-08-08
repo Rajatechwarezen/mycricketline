@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mycricketline/utils/Style.dart';
 
 import '../../../utils/CustomWidget/Dotetext.dart';
+import '../../../utils/CustomWidget/shimmer.dart';
 import 'AllNewsListView.dart';
 import 'NewsContent.dart';
 import 'newsLayout.dart';
@@ -110,7 +112,7 @@ class _NewsState extends State<News> {
               ),
             ),
             newheadingscore(
-              newscontent: truncateText(news.title, 40),
+              newscontent: truncateText(news.title, 50),
               teamScore: news.pubDate,
             ),
           ],
@@ -126,6 +128,9 @@ class _NewsState extends State<News> {
       scrollDirection: Axis.vertical,
       child: Column(
         children: [
+          sizeboxSmallh,
+          sizeboxSmallh,
+          Divider(),
           newstitlebtn(
             context1: context,
             HeadName: 'Trending News',
@@ -142,12 +147,6 @@ class _NewsState extends State<News> {
               },
             ),
           ),
-          _isLoading
-              ? const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(),
-                )
-              : Container(),
         ],
       ),
     );

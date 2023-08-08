@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mycricketline/screen/tab1/livescore/LiveLine/RealTimeLive.dart';
 import 'package:provider/provider.dart';
 
 import '../../AipProvider/LiveMatch.dart';
+import '../../AipProvider/ThemeProvider.dart';
 import '../../utils/Color.dart';
 import '../../utils/CustomWidget/Dotetext.dart';
 import '../../utils/CustomWidget/shimmer.dart';
@@ -25,13 +27,15 @@ class _LiveFullDemoState extends State<LiveFullDemo> {
 
     final liveMatchProvider = Provider.of<LiveMatchProvider>(context);
 
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     return SafeArea(
       child: Scaffold(
         appBar: widget.lengthType.toString().contains("Full")
             ? AppBar(
-                iconTheme: const IconThemeData(color: Colors.black),
+                iconTheme: IconThemeData(color: CustomColor.cricketBlackColor),
                 elevation: 0,
-                backgroundColor: Cricket_app_Background,
+                backgroundColor: CustomColor.cricketAppBackground,
                 title: Center(
                     child: Text(
                   "Live List",
@@ -42,9 +46,16 @@ class _LiveFullDemoState extends State<LiveFullDemo> {
           future: liveMatchProvider.fetchLiveMatches(),
           builder: (context, snapshot) {
             final matches = liveMatchProvider.liveMatches;
-
             if (matches.isEmpty) {
-              return summer2;
+              return Center(
+                  child: matches == [] || matches == "[]"
+                      ? summer
+                      : Lottie.asset(
+                          'images/empty.json',
+                          width: 300,
+                          height: 300,
+                          fit: BoxFit.contain,
+                        ));
             } else {
               return SafeArea(
                 child: Scaffold(
@@ -73,7 +84,9 @@ class _LiveFullDemoState extends State<LiveFullDemo> {
                           margin: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: themeProvider.isDarkTheme
+                                ? CustomColor.cricketWhite
+                                : CustomColor.cricketBlackColor,
                             border: border,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [boxshadow],
@@ -114,8 +127,8 @@ class _LiveFullDemoState extends State<LiveFullDemo> {
                                   ],
                                 ),
                               ),
-                              const Divider(
-                                color: Cricket_textColorSecondary,
+                              Divider(
+                                color: CustomColor.cricketTextColorSecondary,
                                 thickness: 1,
                               ),
                               // Row of team 1
@@ -147,8 +160,8 @@ class _LiveFullDemoState extends State<LiveFullDemo> {
                                   sizeboxSmallw,
                                 ],
                               ),
-                              const Divider(
-                                color: Cricket_textColorSecondary,
+                              Divider(
+                                color: CustomColor.cricketTextColorSecondary,
                                 thickness: 1,
                               ),
 
@@ -166,7 +179,8 @@ class _LiveFullDemoState extends State<LiveFullDemo> {
                                             height: 35,
                                             width: 30,
                                             decoration: BoxDecoration(
-                                              color: Cricket_Gradient_color1,
+                                              color: CustomColor
+                                                  .cricketGradientColor1,
                                               borderRadius: CustomStylesBorder
                                                   .boderRadius10,
                                               border: border,
@@ -188,7 +202,8 @@ class _LiveFullDemoState extends State<LiveFullDemo> {
                                         height: 35,
                                         width: 30,
                                         decoration: BoxDecoration(
-                                          color: Cricket_Gradient_color2,
+                                          color:
+                                              CustomColor.cricketGradientColor2,
                                           borderRadius:
                                               CustomStylesBorder.boderRadius10,
                                           border: border,

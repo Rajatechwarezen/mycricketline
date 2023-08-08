@@ -14,11 +14,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  retry: ^3.0.0
+ 
   cupertino_icons: ^1.0.2
   google_fonts: ^5.1.0
   readmore: ^2.1.0
-  flutter_overlay_window: ^0.4.3
+
+  floating: ^2.0.1
   carousel_slider: ^4.0.0
   provider: ^6.0.5
   flutter_widget_from_html: ^0.10.2
@@ -26,9 +27,12 @@ dependencies:
   shimmer: ^3.0.0
   intl: ^0.18.1
   riverpod: ^2.3.6
- 
+  lottie: ^2.5.0
+  flutter_svg: ^2.0.7
   http: ^1.1.0
-  
+  html: ^0.15.4
+  localstorage: ^4.0.1+4
+  google_mobile_ads: ^3.0.0
   
 dev_dependencies:
   flutter_test:
@@ -38,8 +42,8 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
-
   uses-material-design: true
+
   
   
 
@@ -61,4 +65,7 @@ flutter:
     - images/short.png
     - images/match.png
     - images/textlogo.png
+    - images/dark_mode.png
+    - images/light_mode.png
+    - images/empty.json
     - assets/

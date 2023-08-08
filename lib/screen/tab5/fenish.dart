@@ -3,6 +3,7 @@ import 'package:mycricketline/model/FinishData.dart';
 import 'package:provider/provider.dart';
 
 import '../../AipProvider/FinishApi.dart';
+import '../../AipProvider/ThemeProvider.dart';
 import '../../utils/Color.dart';
 import '../../utils/CustomWidget/Dotetext.dart';
 import '../../utils/CustomWidget/shimmer.dart';
@@ -25,6 +26,8 @@ class _FinishMatchState extends State<FinishMatch> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     final upcommingMatchProvider = Provider.of<FinishMatchesProvider>(context);
+
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     upcommingMatchProvider.fetchUpcomingMatchesFullData();
     final matches = upcommingMatchProvider.finishDataMatches;
@@ -62,7 +65,9 @@ class _FinishMatchState extends State<FinishMatch> {
                   margin:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Cricket_white,
+                    color: themeProvider.isDarkTheme
+                        ? CustomColor.cricketWhite
+                        : CustomColor.cricketBlackColor,
                     border: border,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [boxshadow],
@@ -102,8 +107,8 @@ class _FinishMatchState extends State<FinishMatch> {
                           ],
                         ),
                       ),
-                      const Divider(
-                        color: Cricket_textColorSecondary,
+                      Divider(
+                        color: CustomColor.cricketTextColorSecondary,
                         thickness: 1,
                       ),
                       // Row of team 1
@@ -134,8 +139,8 @@ class _FinishMatchState extends State<FinishMatch> {
                         ],
                       ),
 
-                      const Divider(
-                        color: Cricket_textColorSecondary,
+                      Divider(
+                        color: CustomColor.cricketTextColorSecondary,
                         thickness: 1,
                       ),
 

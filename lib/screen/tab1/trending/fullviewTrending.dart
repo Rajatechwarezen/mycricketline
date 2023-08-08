@@ -7,7 +7,9 @@ import 'finishByTrending.dart';
 
 class TrendingView extends StatefulWidget {
   var matchid;
-  TrendingView({super.key, required this.matchid});
+  var trendingViewName;
+  TrendingView(
+      {super.key, required this.matchid, required this.trendingViewName});
 
   @override
   State<TrendingView> createState() => _TrendingViewState();
@@ -34,11 +36,16 @@ class _TrendingViewState extends State<TrendingView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Cricket_app_Background,
+        backgroundColor: CustomColor.cricketAppBackground,
         appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: CustomColor.cricketBlackColor),
+          title: Center(
+              child: Text(
+            widget.trendingViewName,
+            style: CustomStyles.cardBoldDarkDrawerTextStyle,
+          )),
           elevation: 0,
-          backgroundColor: Cricket_app_Background,
+          backgroundColor: CustomColor.cricketAppBackground,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(kToolbarHeight),
             child: SingleChildScrollView(
@@ -47,7 +54,7 @@ class _TrendingViewState extends State<TrendingView>
               child: TabBar(
                 labelPadding: const EdgeInsets.all(5),
                 controller: _tabController,
-                indicatorColor: Cricket_Primary,
+                indicatorColor: CustomColor.cricketPrimary,
                 isScrollable: true,
                 automaticIndicatorColorAdjustment: true,
                 tabs: [

@@ -1,5 +1,11 @@
+import 'dart:ui';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'dart:async';
+
+import 'package:floating/floating.dart';
+
 import 'package:mycricketline/screen/sidebar/sidebar.dart';
 import 'package:mycricketline/screen/tab1/MyCricketHome.dart';
 import 'package:mycricketline/screen/tab3/LiveFullScreenList.dart';
@@ -10,6 +16,7 @@ import '../AipProvider/LiveMatch.dart';
 import '../AipProvider/ThemeProvider.dart';
 import '../utils/Color.dart';
 
+import '../utils/CustomWidget/Externel.dart';
 import '../utils/CustomWidget/willpop.dart';
 import '../utils/Style.dart';
 import 'bottomnavigation/bottomNavi.dart';
@@ -66,18 +73,16 @@ class _CricketPageState extends State<CricketPage>
     final liveMatchProvider = Provider.of<LiveMatchProvider>(context);
     final seriesdata = Provider.of<SeriesProvider>(context);
     final newsProvider = Provider.of<LiveMatchProvider>(context);
-    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return WillPopWidget(
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Cricket_app_Background,
           appBar: AppBar(
             elevation: 1,
-            backgroundColor: Cricket_app_Background,
+            backgroundColor: CustomColor.cricketAppBackground,
             title: Center(
               child: Container(
                 height: 25,
-                margin: const EdgeInsets.only(left: 40),
                 decoration: BoxDecoration(
                   borderRadius: CustomStylesBorder.borderRadiusfull,
                   image: const DecorationImage(
@@ -87,22 +92,21 @@ class _CricketPageState extends State<CricketPage>
                 ),
               ),
             ),
-            // leading: IconButton(
-            //   icon: Icon(
-            //     _isDrawerOpen == false
-            //         ? Icons.label_important
-            //         : Icons.cancel_outlined,
-            //     color: Cricket_Gradient_color1,
-            //   ),
-            //   onPressed: _toggleDrawer,
-            // ),
             actions: [
-              Switch(
-                value: themeProvider.isDarkTheme,
-                onChanged: (_) => themeProvider.toggleTheme(),
-              ),
-              sizeboxSmallw,
+              Container(margin: EdgeInsets.only(right: 30), child: Text(""))
             ],
+            leading: _isDrawerOpen == false
+                ? const Icon(
+                    null,
+                    color: Colors.transparent,
+                  )
+                : IconButton(
+                    icon: const Icon(
+                      Icons.cancel_outlined,
+                      color: CustomColor.cricketGradientColor1,
+                    ),
+                    onPressed: _toggleDrawer,
+                  ),
           ),
           body: Stack(
             children: [
@@ -117,9 +121,8 @@ class _CricketPageState extends State<CricketPage>
                     child: TabBar(
                       labelPadding: const EdgeInsets.all(5),
                       controller: _tabController,
-                      indicatorColor: Cricket_Primary,
+                      indicatorColor: CustomColor.cricketPrimary,
                       isScrollable: true,
-                      automaticIndicatorColorAdjustment: true,
                       tabs: [
                         Tab(
                           child: Container(
@@ -233,10 +236,7 @@ class _CricketPageState extends State<CricketPage>
                 ),
               ),
               Positioned(
-                bottom: 10,
-                right: -5,
-                child: BottomNavi(),
-              ),
+                  bottom: 10, child: BottomNavi(toggleDrawer: _toggleDrawer)),
               sizeboxSmallh,
               sizeboxSmallh,
               CustomNavigationDrawer(isDrawerOpen: _isDrawerOpen),
@@ -246,4 +246,79 @@ class _CricketPageState extends State<CricketPage>
       ),
     );
   }
+}
+
+class DEMO extends StatefulWidget {
+  const DEMO({super.key});
+
+  @override
+  State<DEMO> createState() => _DEMOState();
+}
+
+class _DEMOState extends State<DEMO> with WidgetsBindingObserver {
+  final floating = Floating();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    floating.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState lifecycleState) {
+    if (lifecycleState == AppLifecycleState.inactive) {
+      floating.enable(aspectRatio: Rational.square());
+    }
+  }
+
+  Future<void> enablePip(BuildContext context) async {
+    final rational = Rational.landscape();
+    final screenSize =
+        MediaQuery.of(context).size * MediaQuery.of(context).devicePixelRatio;
+    final height = screenSize.width ~/ rational.aspectRatio;
+
+    final status = await floating.enable(
+      aspectRatio: rational,
+      sourceRectHint: Rectangle<int>(
+        0,
+        (screenSize.height ~/ 2) - (height ~/ 2),
+        screenSize.width.toInt(),
+        height,
+      ),
+    );
+    debugPrint('PiP enabled? $status');
+  }
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        theme: ThemeData.dark(),
+        home: PiPSwitcher(
+          childWhenDisabled: Scaffold(
+            body: Center(child: Image.asset('assets/image.jpg')),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FutureBuilder<bool>(
+              future: floating.isPipAvailable,
+              initialData: false,
+              builder: (context, snapshot) => snapshot.data ?? false
+                  ? FloatingActionButton.extended(
+                      onPressed: () => enablePip(context),
+                      label: const Text('Enable PiP'),
+                      icon: const Icon(Icons.picture_in_picture),
+                    )
+                  : const Card(
+                      child: Text('PiP unavailable'),
+                    ),
+            ),
+          ),
+          childWhenEnabled: Image.asset('assets/image.jpg'),
+        ),
+      );
 }

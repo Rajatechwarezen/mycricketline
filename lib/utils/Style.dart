@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:provider/provider.dart';
 
+import '../AipProvider/ThemeProvider.dart';
 import 'Color.dart';
 
 class CustomStyles {
-  static final smallheadTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color.fromARGB(255, 128, 128, 128),
-      fontSize: 10,
-      fontFamily: 'Poppins',
-      fontWeight: FontWeight.w800,
-    ),
-  );
+  late Color textcolor;
+
+  CustomStyles(this.textcolor);
+  static final LocalStorage storage = LocalStorage('my_theme_storage');
+
+  static Future<void> initStorage() async {
+    await storage.ready;
+  }
+
   static final smallLightTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color(0xFFFFFFFF),
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
       fontSize: 10,
       fontFamily: 'Poppins',
     ),
   );
   static final smallLightTextStylebold = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color(0xFFFFFFFF),
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
       fontSize: 10,
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w800,
@@ -29,190 +33,201 @@ class CustomStyles {
   );
 
   static final smallLightTextStyle2 = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color(0xFF020202),
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 12,
       fontFamily: 'Poppins',
     ),
   );
 
   static final smallLightTextStylebold2 = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color.fromARGB(255, 0, 0, 0),
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 10,
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w800,
     ),
   );
   static final smallTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color.fromARGB(255, 255, 255, 255),
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
       fontSize: 12,
       fontWeight: FontWeight.w800,
     ),
   );
   static final smallTextStyle2 = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color(0xFF000000),
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 12,
     ),
   );
 
   static final normalTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color.fromARGB(255, 255, 255, 255),
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
       fontSize: 12,
       fontWeight: FontWeight.w700,
     ),
   );
 
   static final normalTextStyle2 = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color(0xff303030),
+    textStyle: TextStyle(
+      color: CustomColor.cricketShadowColor,
       fontSize: 12,
       fontWeight: FontWeight.w700,
     ),
   );
 
   static final mediumTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color.fromARGB(255, 255, 255, 255),
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
       fontSize: 18,
       fontWeight: FontWeight.w700,
     ),
   );
   static final mediumTextStyle2 = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color.fromARGB(255, 0, 0, 0),
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 18,
       fontWeight: FontWeight.w700,
     ),
   );
 
   static final cardBoldTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Colors.white,
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
       fontSize: 14,
       fontWeight: FontWeight.w700,
     ),
   );
   static final cardBoldTextStyle2 = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Colors.black,
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 14,
       fontWeight: FontWeight.w600,
     ),
   );
-  static final cardTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Colors.white,
-      fontSize: 10,
-      fontWeight: FontWeight.w300,
-    ),
-  );
+  static TextStyle cardTextStyle(Color textcolor) {
+    return GoogleFonts.poppins(
+      textStyle: TextStyle(
+        color: textcolor,
+        fontSize: 10,
+        fontWeight: FontWeight.w300,
+      ),
+    );
+  }
+
   static final cardTextStyle2 = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Colors.black,
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 12,
       fontWeight: FontWeight.w400,
     ),
   );
   static final cardBoldDarkTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Colors.black,
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 14,
       fontWeight: FontWeight.w700,
     ),
   );
 
   static final cardBoldDarkDrawerTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Colors.black,
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 16,
       fontWeight: FontWeight.w700,
     ),
   );
 
   static final cardBoldDarkTextStyle2 = GoogleFonts.montserrat(
-    textStyle: const TextStyle(
-      color: Colors.black,
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 14,
       fontWeight: FontWeight.w700,
     ),
   );
   static final grayTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Cricket_SkyBlue_Color,
+    textStyle: TextStyle(
+      color: CustomColor.cricketDarkSkyBlueColor,
       height: 0,
-      fontSize: 26,
-      fontWeight: FontWeight.w700,
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+    ),
+  );
+  static final firstCircle = GoogleFonts.poppins(
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
+      height: 0,
+      fontSize: 21,
+      fontWeight: FontWeight.w500,
     ),
   );
   static final overmontserratwhite = GoogleFonts.montserrat(
-    textStyle: const TextStyle(
-      color: Colors.white,
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
       fontSize: 14,
       fontWeight: FontWeight.w400,
     ),
   );
 
   static final teamtserratwhite = GoogleFonts.roboto(
-    textStyle: const TextStyle(
-      color: Colors.white,
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
       fontSize: 20,
       fontWeight: FontWeight.w800,
     ),
   );
 
   static final cardBoldDarkroboto = GoogleFonts.roboto(
-    textStyle: const TextStyle(
-      color: Colors.black,
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 14,
       fontWeight: FontWeight.w500,
     ),
   );
   static final cardBoldDarkTextStyleWhite = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Colors.white,
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
       fontSize: 16,
       fontWeight: FontWeight.w700,
     ),
   );
 
   static final cardBoldDarkTextStyleblue = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Cricket_Primary,
+    textStyle: TextStyle(
+      color: CustomColor.cricketPrimary,
       fontSize: 12,
       fontWeight: FontWeight.w700,
     ),
   );
   static final cardBoldDarkTextStyleGreen = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Cricket_Primary,
+    textStyle: TextStyle(
+      color: CustomColor.cricketPrimary,
       fontSize: 11,
       fontWeight: FontWeight.w700,
     ),
   );
 
   static final cardNormalTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Colors.white,
+    textStyle: TextStyle(
+      color: CustomColor.cricketWhite,
       fontSize: 15,
       fontWeight: FontWeight.w400,
     ),
   );
 
   static final cardNormalDarkTextStyle = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Color(0xFF000000),
+    textStyle: TextStyle(
+      color: CustomColor.cricketBlackColor,
       fontSize: 12,
       fontWeight: FontWeight.w400,
     ),
   );
 
   static final livefont = GoogleFonts.poppins(
-    textStyle: const TextStyle(
-      color: Cricket_Gradient_color1,
+    textStyle: TextStyle(
+      color: CustomColor.cricketGradientColor1,
       fontSize: 12,
       fontWeight: FontWeight.w800,
     ),
@@ -230,23 +245,23 @@ class CustomStylesBorder {
 
 ////////////////////////////Border
 Border border = Border.all(
-  color: Cricket_textColorSecondary,
+  color: CustomColor.cricketTextColorSecondary,
   width: 0.5,
   style: BorderStyle.solid,
 );
 
 /////////////////////////////////
-var boxshadow = const BoxShadow(
-  color: Color(0xffDDDDDD),
+var boxshadow = BoxShadow(
+  color: CustomColor.cricketTextColorSecondary,
   blurRadius: 6.0,
   spreadRadius: 2.0,
   offset: Offset(0.0, 0.0),
 );
 
 ////
-var sizeboxSmallw = const SizedBox(
+var sizeboxSmallw = SizedBox(
   width: 10,
 );
-var sizeboxSmallh = const SizedBox(
+var sizeboxSmallh = SizedBox(
   height: 10,
 );

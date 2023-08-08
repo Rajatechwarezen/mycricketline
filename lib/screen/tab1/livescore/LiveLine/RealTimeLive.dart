@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 // import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:mycricketline/screen/tab1/livescore/LiveLine/BatBowler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-
-import 'package:riverpod/riverpod.dart';
 
 import 'package:flutter/material.dart';
 
@@ -14,14 +11,19 @@ import 'package:flutter_tts/flutter_tts.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../../../../AipProvider/LiveMatch.dart';
+import '../../../../AipProvider/ThemeProvider.dart';
 import '../../../../model/Livematch.dart';
 import '../../../../utils/Color.dart';
+import '../../../../utils/CustomWidget/Countdown.dart';
 import '../../../../utils/CustomWidget/Dotetext.dart';
 import '../../../../utils/CustomWidget/Externel.dart';
 
 import '../../../../utils/CustomWidget/htmlntoText.dart';
 import '../../../../utils/CustomWidget/shimmer.dart';
 import '../../../../utils/Style.dart';
+
+LiveMatchData? liveMatchData;
 
 class LiveMatchData extends ChangeNotifier {
   int? _id;
@@ -95,11 +97,11 @@ class RealTimeLive extends StatefulWidget {
 }
 
 class _RealTimeLiveState extends State<RealTimeLive> {
-  LiveMatchData? liveMatchData;
   late Timer timer;
   FlutterTts flutterTts = FlutterTts();
   String? previousText;
   bool isSoundEnabled = false;
+
   Future<void> speak(String text) async {
     if (isSoundEnabled && text != previousText) {
       previousText = text;
@@ -146,6 +148,12 @@ class _RealTimeLiveState extends State<RealTimeLive> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     List<Widget> widgetsTeamScore = [];
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
+    // Info Data
+    var Infoprovider = Provider.of<InfoProvider>(context);
+    Infoprovider.fetchLiveMatchesFullDataInfo(widget.idMatch);
+    var mayInfoData = Infoprovider.infoMatches;
 
     return Scaffold(
       body: ChangeNotifierProvider<LiveMatchData>.value(
@@ -159,20 +167,39 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                   body: SingleChildScrollView(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: liveMatches.map((matchDatas) {
-                    speak(matchDatas.firstCircle.toString());
-                    previousText = matchDatas.firstCircle;
-                    if (matchDatas.firstCircle.toString().contains("Six")) {
+                  children: liveMatches.asMap().entries.map((matchDatas) {
+                    int index = matchDatas.key;
+                    LiveMatchFull matchData = matchDatas.value;
+
+                    speak(matchData.firstCircle.toString());
+                    previousText = matchData.firstCircle;
+//////////////////////////////////////////////////////////////////////
+
+                    final matchDateTime = parseMatchDateTime(
+                        mayInfoData[index].matchDate.toString(),
+                        mayInfoData[index].matchTime.toString());
+
+                    final remainingSeconds =
+                        calculateRemainingSeconds(matchDateTime);
+
+                    List<String> textArray =
+                        extractTextFromHtml(matchData.session);
+
+                    //////////////////////////////////////////////////////////////////////
+
+                    if (matchData.firstCircle.toString().contains("Six")) {
                       widgetsTeamScore.add(Text(""));
 
                       widgetsTeamScore.add(
                         Center(
                           child: Container(
-                            width: 50,
-                            height: 10,
+                            width: 100,
+                            height: 60,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Cricket_white,
+                              color: themeProvider.isDarkTheme
+                                  ? CustomColor.cricketWhite
+                                  : CustomColor.cricketBlackColor,
                               borderRadius: CustomStylesBorder.borderRadiusfull,
                               image: const DecorationImage(
                                 image: AssetImage("images/six.gif"),
@@ -184,7 +211,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                       );
                     }
 
-                    if (matchDatas.firstCircle.toString().contains("0")) {
+                    if (matchData.firstCircle.toString().contains("four")) {
                       widgetsTeamScore.add(Text(""));
                       widgetsTeamScore.add(
                         Center(
@@ -193,7 +220,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                             height: 60,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Cricket_white,
+                              color: themeProvider.isDarkTheme
+                                  ? CustomColor.cricketWhite
+                                  : CustomColor.cricketBlackColor,
                               borderRadius: CustomStylesBorder.borderRadiusfull,
                               image: const DecorationImage(
                                 image: AssetImage("images/four.gif"),
@@ -208,8 +237,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                     return Column(
                       children: [
                         ////////main live
-                        matchDatas.result != "" &&
-                                matchDatas.matchType != "Upcoming"
+                        matchData.result != "" && widget.type != "Upcoming"
                             ? Container(
                                 height: 100,
                                 width: screenWidth * 0.9,
@@ -217,7 +245,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                 decoration: BoxDecoration(
                                   border: border,
                                   boxShadow: [boxshadow],
-                                  color: Cricket_white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                 ),
@@ -226,7 +256,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                       top: 0,
                                       left: 160,
                                       child: Text(
-                                        "${matchDatas.matchType}",
+                                        "${matchData.matchType}",
                                         style: CustomStyles.livefont,
                                       )),
 
@@ -239,7 +269,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                             width: 150,
                                             alignment: Alignment.center,
                                             child: Text(
-                                              matchDatas.firstCircle.toString(),
+                                              matchData.firstCircle.toString(),
                                               style: CustomStyles
                                                   .cardBoldDarkroboto,
                                               textAlign: TextAlign.center,
@@ -260,7 +290,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                             Row(
                                               children: [
                                                 Text(
-                                                  matchDatas.teamAShort
+                                                  matchData.teamAShort
                                                       .toString(),
                                                   style: CustomStyles
                                                       .cardBoldDarkDrawerTextStyle,
@@ -289,7 +319,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                             Row(
                                               children: [
                                                 Text(
-                                                  matchDatas.teamBShort
+                                                  matchData.teamBShort
                                                       .toString(),
                                                   style: CustomStyles
                                                       .cardBoldDarkDrawerTextStyle,
@@ -316,185 +346,247 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                 ]),
                               )
                             : Container(
-                                height: 100,
+                                height: screenWidth * 0.3,
                                 width: screenWidth * 0.9,
-                                margin: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                 ),
-                                child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 5),
-                                  decoration: BoxDecoration(
-                                      color: Cricket_Primary,
-                                      borderRadius:
-                                          CustomStylesBorder.boderRadius10,
-                                      border: border),
-                                  width: screenWidth * 1,
-                                  height: 310,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                height: 55,
-                                                width: 55,
-                                                margin: const EdgeInsets.only(
-                                                    top: 5,
-                                                    left: 10,
-                                                    right: 10),
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      CustomStylesBorder
-                                                          .boderRadius10,
-                                                  border: border,
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(matchDatas
-                                                                .battingTeam ==
-                                                            matchDatas.teamAId
-                                                                .toString()
-                                                        ? matchDatas.teamAImg
-                                                            .toString()
-                                                        : matchDatas.teamBImg
-                                                            .toString()),
-                                                    fit: BoxFit.fitHeight,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Container(
+                                      width: screenWidth * 0.9,
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          color: CustomColor.cricketPrimary,
+                                          borderRadius:
+                                              CustomStylesBorder.boderRadius10,
+                                          border: border),
+                                      height: 310,
+                                      child: widget.type != "Upcoming"
+                                          ? Stack(
+                                              children: [
+                                                Positioned(
+                                                    top: 0,
+                                                    left: 160,
+                                                    child: Text(
+                                                      "${matchData.matchType}",
+                                                      style: CustomStyles
+                                                          .normalTextStyle2,
+                                                    )),
+                                                Positioned(
+                                                  top: 0,
+                                                  right: 0,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        isSoundEnabled =
+                                                            !isSoundEnabled;
+                                                      });
+                                                    },
+                                                    child: Icon(
+                                                      isSoundEnabled
+                                                          ? Icons.volume_up
+                                                          : Icons.volume_off,
+                                                      color: Colors.blue,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Column(
+                                                      children: [
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Container(
+                                                              height: 30,
+                                                              width: 30,
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top: 5,
+                                                                      left: 10,
+                                                                      right:
+                                                                          10),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(10),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    CustomStylesBorder
+                                                                        .borderRadiusfull,
+                                                                border: border,
+                                                                image:
+                                                                    DecorationImage(
+                                                                  image: NetworkImage(matchData
+                                                                              .battingTeam ==
+                                                                          matchData
+                                                                              .teamAId
+                                                                              .toString()
+                                                                      ? matchData
+                                                                          .teamAImg
+                                                                          .toString()
+                                                                      : matchData
+                                                                          .teamBImg
+                                                                          .toString()),
+                                                                  fit: BoxFit
+                                                                      .fitHeight,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Container(
+                                                                    margin: const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            10),
+                                                                    child: Text(
+                                                                        matchData.battingTeam.toString() == matchData.teamAId.toString()
+                                                                            ? matchData.teamAShort
+                                                                                .toString()
+                                                                            : matchData.teamBShort
+                                                                                .toString(),
+                                                                        style: CustomStyles
+                                                                            .cardBoldDarkTextStyleWhite)),
+                                                                Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    Container(
+                                                                      width: 84,
+                                                                      child: Text(
+                                                                          matchData.battingTeam.toString() == matchData.teamAId.toString()
+                                                                              ? matchData.teamAScores.toString().split("&")[0]
+                                                                              : matchData.teamBScore.toString().split("&")[0].replaceAll('\n', ''),
+                                                                          style: CustomStyles.grayTextStyle),
+                                                                    ),
+                                                                    Container(
+                                                                      margin: const EdgeInsets
+                                                                              .only(
+                                                                          bottom:
+                                                                              10,
+                                                                          left:
+                                                                              5),
+                                                                      child: Text(
+                                                                          matchData.battingTeam == matchData.teamAId
+                                                                              ? matchData.teamAOver.toString()
+                                                                              : matchData.teamBover.toString().split("&")[0],
+                                                                          style: CustomStyles.overmontserratwhite),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      width: 8,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Container(
+                                                      height: 130,
+                                                      width: 20,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: AssetImage(
+                                                              "images/Line1.png"),
+                                                          fit: BoxFit.fitHeight,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        matchData.firstCircle
+                                                                    .toString()
+                                                                    .contains(
+                                                                        "Six") ||
+                                                                matchData
+                                                                    .firstCircle
+                                                                    .toString()
+                                                                    .contains(
+                                                                        "0")
+                                                            ? Row(
+                                                                children:
+                                                                    widgetsTeamScore,
+                                                              )
+                                                            : Container(
+                                                                width:
+                                                                    screenWidth *
+                                                                        0.3,
+                                                                child: Text(
+                                                                  truncateText(
+                                                                      matchData
+                                                                          .firstCircle
+                                                                          .toString()
+                                                                          .replaceAll(
+                                                                              '\n',
+                                                                              ''),
+                                                                      15),
+                                                                  style: CustomStyles
+                                                                      .firstCircle,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                ),
+                                                              )
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            )
+                                          : Container(
+                                              width: screenWidth * 0.8,
+                                              child: Column(
                                                 children: [
-                                                  Container(
-                                                      margin:
-                                                          const EdgeInsets.only(
-                                                              top: 10),
-                                                      child: Text(
-                                                          matchDatas.battingTeam ==
-                                                                  matchDatas
-                                                                      .teamAId
-                                                                      .toString()
-                                                              ? matchDatas
-                                                                  .teamAShort
-                                                                  .toString()
-                                                              : matchDatas
-                                                                  .teamBShort
-                                                                  .toString(),
-                                                          style: CustomStyles
-                                                              .teamtserratwhite)),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                          matchDatas.battingTeam ==
-                                                                  matchDatas
-                                                                      .teamAId
-                                                                      .toString()
-                                                              ? widget.Data[0]
-                                                                  .toString()
-                                                              : widget.Data[1]
-                                                                  .toString(),
-                                                          style: CustomStyles
-                                                              .grayTextStyle),
-                                                      Container(
-                                                        margin: const EdgeInsets
-                                                                .only(
-                                                            bottom: 10,
-                                                            left: 10),
-                                                        child: Text(
-                                                            matchDatas.battingTeam ==
-                                                                    matchDatas
-                                                                        .teamAId
-                                                                        .toString()
-                                                                ? matchDatas
-                                                                    .teamAOver
-                                                                    .toString()
-                                                                    .split(
-                                                                        "&")[0]
-                                                                : matchDatas
-                                                                    .teamBover
-                                                                    .toString()
-                                                                    .split(
-                                                                        "&")[1],
-                                                            style: CustomStyles
-                                                                .overmontserratwhite),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 8,
-                                                      ),
-                                                    ],
+                                                  Text(
+                                                    matchData.matchType,
+                                                    style: CustomStyles
+                                                        .cardBoldTextStyle,
                                                   ),
+                                                  Container(
+                                                    padding: EdgeInsets.all(10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          CustomStylesBorder
+                                                              .boderRadius10,
+                                                      color: CustomColor
+                                                          .cricketWhite,
+                                                      border: border,
+                                                    ),
+                                                    child: CountdownTimerWidget(
+                                                        totalSeconds:
+                                                            remainingSeconds),
+                                                  )
                                                 ],
                                               ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                      Container(
-                                        height: 55,
-                                        width: 55,
-                                        decoration: const BoxDecoration(
-                                          image: DecorationImage(
-                                            image:
-                                                AssetImage("images/Line1.png"),
-                                            fit: BoxFit.fitHeight,
-                                          ),
-                                        ),
-                                      ),
-                                      SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.center,
-                                              padding: const EdgeInsets.all(5),
-                                              color: Cricket_color1,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 5,
-                                                      vertical: 5),
-                                              width: screenWidth * 0.1,
-                                              child: Text(
-                                                truncateText(
-                                                    matchDatas.firstCircle, 6),
-                                                style:
-                                                    CustomStyles.cardTextStyle,
-                                              ),
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  isSoundEnabled =
-                                                      !isSoundEnabled;
-                                                });
-                                              },
-                                              child: Icon(
-                                                isSoundEnabled
-                                                    ? Icons.volume_up
-                                                    : Icons.volume_off,
-                                                color: Colors.blue,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                            )),
                                 )),
-                        // Column(
-                        //   children: widgetsTeamScore.isNotEmpty
-                        //       ? widgetsTeamScore
-                        //       : [Container(child: const Text(""))],
-                        // ),
+
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -504,7 +596,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 5),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                   border: border),
@@ -517,18 +611,13 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                       "Over :",
                                       style: CustomStyles.cardBoldTextStyle2,
                                     ),
-                                    matchDatas.last36Ball != null
+                                    matchData.last36Ball != null
                                         ? Row(
                                             children: List.generate(
-                                                matchDatas.last4Overs!.last.ball
+                                                matchData.last4Overs!.last.ball
                                                     .length, (index) {
-                                            // print(matchDatas.last4Overs!.map(
-                                            //     (e) => e.ball.last.length));
-
-                                            // over =
-                                            //     matchDatas.last36Ball![index];
                                             var qover =
-                                                matchDatas.last4Overs!.last;
+                                                matchData.last4Overs!.last;
                                             var myoverball = qover.ball[index];
                                             return Row(children: [
                                               Container(
@@ -540,7 +629,11 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                                         horizontal: 10,
                                                         vertical: 5),
                                                 decoration: BoxDecoration(
-                                                  color: Colors.white,
+                                                  color: themeProvider
+                                                          .isDarkTheme
+                                                      ? CustomColor.cricketWhite
+                                                      : CustomColor
+                                                          .cricketBlackColor,
                                                   borderRadius:
                                                       CustomStylesBorder
                                                           .boderRadius10,
@@ -562,7 +655,10 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                               height: 40,
                                               padding: const EdgeInsets.all(10),
                                               decoration: BoxDecoration(
-                                                color: Cricket_white,
+                                                color: themeProvider.isDarkTheme
+                                                    ? CustomColor.cricketWhite
+                                                    : CustomColor
+                                                        .cricketBlackColor,
                                                 borderRadius: CustomStylesBorder
                                                     .borderRadiusfull,
                                                 image: const DecorationImage(
@@ -579,11 +675,13 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                             ),
 
                             Container(
-                              padding: EdgeInsets.all(5),
-                              margin: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.all(5),
+                              margin: const EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 15),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                   border: border),
@@ -605,7 +703,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                               Text("CRR :-",
                                                   style: CustomStyles
                                                       .cardBoldDarkTextStyleblue),
-                                              Text(matchDatas.currRate ?? "0",
+                                              Text(matchData.currRate ?? "0",
                                                   style: CustomStyles
                                                       .cardBoldDarkTextStyle2),
                                             ],
@@ -625,7 +723,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                               Text("RRR :-",
                                                   style: CustomStyles
                                                       .cardBoldDarkTextStyleblue),
-                                              Text(matchDatas.rRRate.toString(),
+                                              Text(matchData.rRRate.toString(),
                                                   style: CustomStyles
                                                       .cardBoldDarkTextStyle2),
                                             ],
@@ -645,7 +743,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                               Text("TARGET :-",
                                                   style: CustomStyles
                                                       .cardBoldDarkTextStyleblue),
-                                              Text(matchDatas.target.toString(),
+                                              Text(matchData.target.toString(),
                                                   style: CustomStyles
                                                       .cardBoldDarkTextStyle2),
                                             ],
@@ -663,7 +761,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                               margin: EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 5),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                   border: border),
@@ -684,7 +784,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                  "${matchDatas.battingTeam == matchDatas.teamAId.toString() ? matchDatas.runneed : matchDatas.result}",
+                                                  "${matchData.battingTeam == matchData.teamAId.toString() ? matchData.teamA : matchData.teamB} Need ${matchData.battingTeam == matchData.teamAId.toString() ? matchData.runneed : matchData.result}",
                                                   style: CustomStyles.livefont),
                                             ],
                                           ),
@@ -701,7 +801,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                               margin: EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 15),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                   border: border),
@@ -721,7 +823,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                           Row(
                                             children: [
                                               Text(
-                                                  "Fan Team: :-${matchDatas.favTeam ?? "0"}",
+                                                  "Fan Team: :-${matchData.favTeam ?? "0"}",
                                                   style: CustomStyles
                                                       .smallLightTextStyle2)
                                             ],
@@ -739,7 +841,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                           Row(
                                             children: [
                                               Text(
-                                                matchDatas.favTeam ?? "0",
+                                                matchData.favTeam ?? "0",
                                                 style: CustomStyles
                                                     .smallLightTextStyle2,
                                               ),
@@ -759,10 +861,10 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              smallboxRed(matchDatas.minRate
-                                                  .toString()),
+                                              smallboxRed(
+                                                  matchData.minRate.toString()),
                                               smallboxblue(
-                                                  matchDatas.maxRate.toString())
+                                                  matchData.maxRate.toString())
                                             ],
                                           )
                                         ],
@@ -785,7 +887,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                           Row(
                                             children: [
                                               Text(
-                                                  "Over  :-${matchDatas.sOvr ?? "0"}",
+                                                  "Over  :-${matchData.sOvr ?? "0"}",
                                                   style: CustomStyles
                                                       .cardBoldDarkTextStyleblue),
                                             ],
@@ -822,9 +924,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               smallboxRed(
-                                                  matchDatas.sMin.toString()),
+                                                  matchData.sMin.toString()),
                                               smallboxblue(
-                                                  matchDatas.sMax.toString())
+                                                  matchData.sMax.toString())
                                             ],
                                           )
                                         ],
@@ -839,14 +941,16 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                               height: 290,
                               width: screenWidth * 0.9,
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                   border: border),
                               child: MatchDetailsLayout(
-                                  batsmen1: matchDatas,
-                                  batsmen2: matchDatas,
-                                  bowlers: matchDatas),
+                                  batsmen1: matchData,
+                                  batsmen2: matchData,
+                                  bowlers: matchData),
                             ),
 
                             Container(
@@ -854,7 +958,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                               margin: EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 15),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                   border: border),
@@ -953,7 +1059,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                           Row(
                                             children: [
                                               Text(
-                                                matchDatas.partnership!.balls
+                                                matchData.partnership!.balls
                                                     .toString(),
                                                 style: CustomStyles
                                                     .cardBoldDarkTextStyle2,
@@ -973,7 +1079,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                           Row(
                                             children: [
                                               Text(
-                                                matchDatas.partnership!.runs
+                                                matchData.partnership!.runs
                                                     .toString(),
                                                 style: CustomStyles
                                                     .cardBoldDarkTextStyle2,
@@ -993,7 +1099,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 15),
                               decoration: BoxDecoration(
-                                  color: Cricket_white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                   border: border),
@@ -1008,22 +1116,22 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text(matchDatas.teamAShort
-                                                .toString())
+                                            Text(
+                                                matchData.teamAShort.toString())
                                           ],
                                         ),
                                         Row(
                                           children: [
                                             smallboxRed(
-                                                matchDatas.minRate.toString()),
+                                                matchData.minRate.toString()),
                                             smallboxblue(
-                                                matchDatas.maxRate.toString())
+                                                matchData.maxRate.toString())
                                           ],
                                         )
                                       ],
                                     ),
                                     //col3
-                                    matchDatas.matchType
+                                    matchData.matchType
                                             .toString()
                                             .contains("Test")
                                         ? Column(
@@ -1033,10 +1141,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                               ),
                                               Row(
                                                 children: [
-                                                  smallboxRed(matchDatas
-                                                      .minRate2
+                                                  smallboxRed(matchData.minRate2
                                                       .toString()),
-                                                  smallboxblue(matchDatas
+                                                  smallboxblue(matchData
                                                       .maxRate2
                                                       .toString())
                                                 ],
@@ -1050,16 +1157,16 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text(matchDatas.teamBShort
-                                                .toString())
+                                            Text(
+                                                matchData.teamBShort.toString())
                                           ],
                                         ),
                                         Row(
                                           children: [
                                             smallboxRed(
-                                                matchDatas.minRate.toString()),
+                                                matchData.minRate.toString()),
                                             smallboxblue(
-                                                matchDatas.maxRate.toString())
+                                                matchData.maxRate.toString())
                                           ],
                                         )
                                       ],
@@ -1073,7 +1180,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 15),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                   border: border),
@@ -1095,7 +1204,7 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "${matchDatas.yetToBet != null ? matchDatas.yetToBet!.map((e) => e) : "--"}",
+                                      "${matchData.yetToBet != null ? matchData.yetToBet!.map((e) => e) : "--"}",
                                       style:
                                           CustomStyles.cardBoldDarkTextStyle2,
                                     ),
@@ -1109,7 +1218,9 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                               margin: EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 15),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeProvider.isDarkTheme
+                                      ? CustomColor.cricketWhite
+                                      : CustomColor.cricketBlackColor,
                                   borderRadius:
                                       CustomStylesBorder.boderRadius10,
                                   border: border),
@@ -1146,38 +1257,8 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                                             width: 200,
                                             child: Column(
                                               children: [
-                                                HtmlWidget(
-                                                  """
-
-                                                                         ${matchDatas.session.toString()}
-
-                                                """,
-                                                  textStyle:
-                                                      TextStyle(fontSize: 12),
-                                                  customStylesBuilder:
-                                                      (element) {
-                                                    if (element.outerHtml
-                                                        .contains('<p>')) {
-                                                      return {
-                                                        'font-size': '10px',
-                                                        'color': 'blue',
-                                                        'font-weight': '700',
-                                                        "text-align": "center",
-                                                      };
-                                                    } else {
-                                                      return {
-                                                        "text-align": "center",
-                                                        'font-size': '15px',
-                                                        'color': 'blue',
-                                                        'margin': '8px 0',
-                                                        'font-weight': '700',
-                                                      };
-                                                    }
-                                                  },
-                                                ),
-                                                Text(convertDataToText(
-                                                    matchDatas.session
-                                                        .toString())),
+                                                //  buildColumn(textArray)
+                                                myHtmlWidget(matchData.session)
                                               ],
                                             ),
                                           ),
@@ -1194,7 +1275,6 @@ class _RealTimeLiveState extends State<RealTimeLive> {
                 ),
               ));
             } else {
-              // Data is not available, show a progress indicator or loading state
               return SafeArea(
                   child: Center(
                 child: summer,

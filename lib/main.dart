@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mycricketline/screen/Myhome.dart';
 import 'package:mycricketline/screen/Mysplash.dart';
 
 import 'package:mycricketline/utils/Color.dart';
@@ -11,10 +13,11 @@ import 'AipProvider/commentaryApi.dart';
 import 'AipProvider/oddsApi.dart';
 import 'AipProvider/pointTableApi.dart';
 import 'AipProvider/upcomingapi.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-Future<void> main() async {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  MobileAds.instance.initialize();
   runApp(const MyApp());
 }
 
@@ -65,13 +68,14 @@ class MyApp extends StatelessWidget {
                 create: (_) => YourDataProvider(),
               ),
             ],
-            child: MaterialApp(
+            child: const MaterialApp(
               title: 'Mycriketline',
-              home: const SplashScreen(),
+              home: !kIsWeb
+                  ? SplashScreen()
+                  : MaterialApp(
+                      home: CricketPage(),
+                    ),
               debugShowCheckedModeBanner: false,
-              theme: themeProvider.isDarkTheme
-                  ? buildDarkTheme()
-                  : buildLightTheme(),
             ),
           );
         },

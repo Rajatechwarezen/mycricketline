@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import '../../../AipProvider/LiveMatch.dart';
 import '../../../model/newData.dart';
+import '../../../utils/Color.dart';
 
 class MyNewsWidget extends StatefulWidget {
   const MyNewsWidget({Key? key}) : super(key: key);
@@ -22,6 +23,15 @@ class _MyNewsWidgetState extends State<MyNewsWidget> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+            iconTheme: IconThemeData(color: CustomColor.cricketBlackColor),
+            elevation: 0,
+            backgroundColor: CustomColor.cricketAppBackground,
+            title: Center(
+                child: Text(
+              "Trending News",
+              style: CustomStyles.cardBoldDarkDrawerTextStyle,
+            ))),
         body: SingleChildScrollView(
           child: Column(
             children: newsList.asMap().entries.map((entry) {
