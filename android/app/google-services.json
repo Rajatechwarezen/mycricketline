@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "381985912305",
+    "project_id": "sprotbuzz",
+    "storage_bucket": "sprotbuzz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381985912305:android:eecb3f8171df6cefd20050",
+        "android_client_info": {
+          "package_name": "com.example.sprotbuzz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALlHLbvKFrdX0yAJEYjLIJLEtjnmD8dSo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
