@@ -34,9 +34,11 @@ class LiveMatchFull {
   final dynamic ballingTeam;
   final dynamic battingTeam;
   final TeamScore? teamAScore;
+    final TeamScore? teamBScore;
   final dynamic teamAScores;
   final dynamic teamAOver;
   final List<TeamScoreOver>? teamAScoresOver;
+    final List<TeamScoreOver>? teamBScoresOver;
   final dynamic lambiOvr;
   final dynamic lambiMin;
   final dynamic lambiMax;
@@ -48,7 +50,7 @@ class LiveMatchFull {
   final List<String>? last36Ball;
   final dynamic session;
   final dynamic runneed;
-  final dynamic teamBScore;
+  final dynamic teamBScores;
   final dynamic teamBover;
   LiveMatchFull(
       {this.target,
@@ -86,8 +88,10 @@ class LiveMatchFull {
       this.battingTeam,
       this.teamAScore,
       this.teamAScores,
+      this.teamBScore,
       this.teamAOver,
       this.teamAScoresOver,
+      this.teamBScoresOver,
       this.lambiOvr,
       this.lambiMin,
       this.lambiMax,
@@ -98,7 +102,7 @@ class LiveMatchFull {
       this.last36Ball,
       this.session,
       this.rRRate,
-      this.teamBScore,
+      this.teamBScores,
       this.teamBover,
       this.runneed});
 
@@ -129,7 +133,8 @@ class LiveMatchFull {
         teamAImg: json?['team_a_img'] ?? "-",
         teamBId: json?['team_b_id'] ?? "-",
         teamB: json?['team_b'] ?? "-",
-        teamBScore: json?['team_b_scores'],
+        teamBScores: json?['team_b_scores'],
+        teamBScore:  TeamScore.fromJson(json?['team_b_score']) ,
         teamBover: json?['team_b_over'],
         teamBShort: json?['team_b_short'] ?? "-",
         teamBImg: json?['team_b_img'] ?? "-",
@@ -149,6 +154,10 @@ class LiveMatchFull {
         teamAScoresOver: (json?['team_a_scores_over'] as List<dynamic>?)
             ?.map((x) => TeamScoreOver.fromJson(x))
             .toList(),
+
+            teamBScoresOver:(json?['team_b_scores_over'] as List<dynamic>?)
+            ?.map((x) => TeamScoreOver.fromJson(x))
+            .toList(),
         lambiOvr: json?['lambi_ovr'] ?? "-",
         lambiMin: json?['lambi_min'] ?? "-",
         lambiMax: json?['lambi_max'] ?? "-",
@@ -159,7 +168,7 @@ class LiveMatchFull {
             ?.map((x) => OverStats.fromJson(x))
             .toList(),
         last36Ball: (json?['last36ball'] as List<dynamic>?)?.cast<String>(),
-        session: json?['session'] ?? "-------");
+        session: json?['session'] ?? "");
   }
 }
 
@@ -223,11 +232,12 @@ class TeamScore {
   final dynamic score;
   final dynamic wicket;
   final dynamic ball;
-
+final dynamic over;
   TeamScore({
     this.score,
     this.wicket,
     this.ball,
+    this.over
   });
 
   factory TeamScore.fromJson(Map<String, dynamic>? json) {
@@ -235,6 +245,7 @@ class TeamScore {
       score: json?['score'] ?? "-",
       wicket: json?['wicket'] ?? "-",
       ball: json?['ball'] ?? "-",
+      over:json?["over"] ?? " "
     );
   }
 }

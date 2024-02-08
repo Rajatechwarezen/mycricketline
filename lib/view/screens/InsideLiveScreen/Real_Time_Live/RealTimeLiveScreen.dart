@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:sprotbuzz/core/utilis/borderbox.dart';
 import 'package:sprotbuzz/view/component/custom_loader/custom_loader.dart';
 import 'package:sprotbuzz/view/component/html/htmlComp.dart';
+import 'package:sprotbuzz/view/screens/InsideLiveScreen/Real_Time_Live/LiveLine/BatBowler.dart';
 import 'package:sprotbuzz/view/screens/InsideLiveScreen/Real_Time_Live/LiveLine/Livecomponet/MyLiveCoponent.dart';
 import 'package:sprotbuzz/view/screens/InsideLiveScreen/Real_Time_Live/RealTimecomponent/RealTimecomponent.dart';
 
@@ -111,6 +112,9 @@ class _RealTimeLiveScreenState extends State<RealTimeLiveScreen> {
                               matchData: matchData,
                               remainingSeconds: remainingSeconds,
                             ),
+                    
+                    
+                    
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -437,19 +441,19 @@ class _RealTimeLiveScreenState extends State<RealTimeLiveScreen> {
                             ]),
                           ),
 
-                          // Container(
-                          //   height: 290,
-                          //   width: screenWidth * 0.9,
-                          //   decoration: BoxDecoration(
-                          // color:MyColor.getCardBg(),
-                          //       borderRadius:
-                          //          boRadiusAll,
-                          //       border: border),
-                          //   child: MatchDetailsLayout(
-                          //       batsmen1: matchData,
-                          //       batsmen2: matchData,
-                          //       bowlers: matchData),
-                          // ),
+                          Container(
+                            height: 290,
+                            width: screenWidth * 0.9,
+                            decoration: BoxDecoration(
+                          color:MyColor.getCardBg(),
+                                borderRadius:
+                                   boRadiusAll,
+                                border: border),
+                            child: MatchDetailsLayout(
+                                batsmen1: matchData,
+                                batsmen2: matchData,
+                                bowlers: matchData),
+                          ),
 
                           cardBoxUi(
                             screenWidth: screenWidth,
@@ -708,7 +712,7 @@ class _RealTimeLiveScreenState extends State<RealTimeLiveScreen> {
                               ),
                             ]),
                           ),
-                          // ////////////////////////////////////////////////////////////////session
+                          //Session =================================================
                           cardBoxUi(
                             screenWidth: screenWidth,
                             child: Column(

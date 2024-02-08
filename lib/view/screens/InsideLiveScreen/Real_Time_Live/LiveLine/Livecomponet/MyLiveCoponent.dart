@@ -69,7 +69,7 @@ speak(matchData.firstCircle.toString());
               ? Stack(
                   children: [
                     Positioned(
-                      top: 0,
+                      top: 10,
                       left: 160,
                       child: Text(
                         "${matchData.matchType}",
@@ -98,7 +98,8 @@ speak(matchData.firstCircle.toString());
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                           Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                             
                                 Column(
@@ -145,50 +146,44 @@ speak(matchData.firstCircle.toString());
                                 ),
                                
                                
-                             Container(
-                              color: Colors.amber,
-                               child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: [
-                                          SizedBox(
-                                            child: Text(
-                                              matchData.battingTeam.toString() ==
-                                                      matchData.teamAId.toString()
-                                                  ? matchData.teamAScores
-                                                      .toString()
-                                                      .split("&")[0]
-                                                  : matchData.teamBScore
-                                                      .toString()
-                                                      .split("&")[0]
-                                                      .replaceAll('\n', ''),
-                                              style:
-                                                  interBoldHeader2.copyWith(
-                                                color: MyColor.getTextColor(),
-                                              ),
+                             Row(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(right: 10,),
+                                          child: Text(
+                                            matchData.battingTeam.toString() ==
+                                                    matchData.teamAId.toString()
+                                                ? matchData.teamAScores
+                                                    .toString()
+                                                    .split("&")[0]
+                                                : matchData.teamBScore
+                                                    .toString()
+                                                    .split("&")[0]
+                                                    .replaceAll('\n', ''),
+                                            style:
+                                                interBoldHeader2.copyWith(
+                                              color: MyColor.getTextColor(),
                                             ),
                                           ),
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                              bottom: 10,
-                                              left: 5,
-                                            ),
-                                            child: Text(
-                                              matchData.battingTeam ==
-                                                      matchData.teamAId
-                                                  ? matchData.teamAOver.toString()
-                                                  : matchData.teamBover
-                                                     ,
-                                              style: interSemiBoldExtraSmall.copyWith(
-                                                color: MyColor.getTextColor(),
-                                              ),
+                                        ),
+                                        
+                                        SizedBox(
+                                           child: Text(
+                                            matchData.battingTeam ==
+                                                    matchData.teamAId
+                                                ? "${ matchData.teamBScoresOver![0].over.toString()} "
+                                                : "${matchData.teamAScoresOver![0].over.toString()} "                                  
+                                                   ,
+                                            style: interSemiBoldExtraSmall.copyWith(
+                                              color: MyColor.getTextColor(),
                                             ),
                                           ),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                        ],
-                                      ),
-                             ),
+                                        ),
+                                        
+                                      ],
+                                    ),
                               ],
                             ),
                          

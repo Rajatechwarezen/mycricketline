@@ -45,27 +45,27 @@ class MatchDetailsLayout extends StatelessWidget {
               DataColumn(
                   label: Text(
                 'R',
-                style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
               )),
               DataColumn(
                   label: Text(
                 'B',
-                style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
               )),
               DataColumn(
                   label: Text(
                 '4s',
-                style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
               )),
               DataColumn(
                   label: Text(
                 '6s',
-                style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
               )),
               DataColumn(
                   label: Text(
                 'S/F',
-                style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
               )),
             ],
             rows: batsmen1.batsmen!.map(
@@ -73,33 +73,33 @@ class MatchDetailsLayout extends StatelessWidget {
                 return DataRow(
                     color: MaterialStateColor.resolveWith((states) {
                       return batsmen.name.toString().contains("*")
-                          ? MyColor.lPrimaryColor
+                          ? MyColor.myGolden()
                           : Colors.transparent;
                     }),
                     cells: [
                       DataCell(Text(
                         batsmen.name.toString(),
-                        style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                       DataCell(Text(
                         batsmen.run.toString(),
-                        style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                       DataCell(Text(
                         batsmen.ball.toString(),
-                        style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                       DataCell(Text(
                         batsmen.fours.toString(),
-                        style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                       DataCell(Text(
                         batsmen.sixes.toString(),
-                        style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                       DataCell(Text(
                         batsmen.strikeRate.toString(),
-                        style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                     ]);
               },
@@ -118,32 +118,32 @@ class MatchDetailsLayout extends StatelessWidget {
                   label: SizedBox(
                       width: screenWidth * 0.4,
                       child: Text('Bolwer',
-                          style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() )))),
+                          style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() )))),
               DataColumn(
-                  label: Text('M', style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                  label: Text('M', style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
               DataColumn(
-                  label: Text('R', style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                  label: Text('R', style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
               DataColumn(
-                  label: Text('W', style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                  label: Text('W', style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
               DataColumn(
-                  label: Text('O', style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                  label: Text('O', style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
               DataColumn(
-                  label: Text('Eco', style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                  label: Text('Eco', style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
             ],
             rows: [
               DataRow(cells: [
                 DataCell(Text(bowlers.bowler!.name.toString(),
-                    style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
                 DataCell(Text(bowlers.bowler!.economy.toString(),
-                    style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
                 DataCell(Text(bowlers.bowler!.wicket.toString(),
-                    style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
                 DataCell(Text(bowlers.bowler!.run.toString(),
-                    style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
                 DataCell(Text(bowlers.bowler!.maidens.toString(),
-                    style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
                 DataCell(Text(bowlers.bowler!.over.toString(),
-                    style:  interSemiBoldOverSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
               ]),
             ],
           ),
