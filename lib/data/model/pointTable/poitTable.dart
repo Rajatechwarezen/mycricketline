@@ -1,12 +1,12 @@
 class PointTable {
-  final String teams;
-  final String flag;
-  final String p;
-  final String w;
-  final String l;
-  final String nr;
-  final String pts;
-  final String nrr;
+  final dynamic  teams;
+  final dynamic flag;
+  final dynamic p;
+  final dynamic w;
+  final dynamic l;
+  final dynamic nr;
+  final dynamic pts;
+  final dynamic nrr;
 
   PointTable({
     required this.teams,
@@ -21,14 +21,14 @@ class PointTable {
 
   factory PointTable.fromJson(Map<String, dynamic> json) {
     return PointTable(
-      teams: json['teams'],
-      flag: json['flag'],
-      p: json['P'],
-      w: json['W'],
-      l: json['L'],
-      nr: json['NR'],
-      pts: json['Pts'],
-      nrr: json['NRR'],
+      teams: json['teams']??"",
+      flag: json['flag']??"",
+      p: json['P']??"",
+      w: json['W']??"",
+      l: json['L']??"",
+      nr: json['NR']??"",
+      pts: json['Pts']?? "",
+      nrr: json['NRR'] ?? "",
     );
   }
 }

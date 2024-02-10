@@ -74,16 +74,7 @@ class _HomeScreenCarouselState extends State<HomeScreenCarousel> {
                                 idMatch: details.matchId,
                                 type: details.matchStatus,
                                 allData: details,
-                                // data: [
-                                //   details.teamAScore
-                                //       .toString()
-                                //       .split("&")[0],
-                                //   details.teamBScore
-                                //       .toString()
-                                //       .split("&")[0],
-                                //   details.teamAOver.split("&")[0],
-                                //   details.teamBOver.split("&")[0]
-                                // ],
+                          
                               )),
                     );
                   },

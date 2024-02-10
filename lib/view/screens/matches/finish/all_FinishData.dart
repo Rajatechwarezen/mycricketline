@@ -6,6 +6,7 @@ import '../../../../data/repo/allmatches_repo/AllmatchesRepo.dart';
 import '../../../../data/servies/api_service.dart';
 import '../../../component/custom_loader/custom_loader.dart';
 import '../../../component/show_match_container/show_match_container.dart';
+import '../../InsideLiveScreen/InsideLiveScreen.dart';
 
 class AllFinishList extends StatefulWidget {
   const AllFinishList({super.key});
@@ -42,7 +43,9 @@ class _AllFinishListState extends State<AllFinishList> {
                 child: Center(child: CustomLoader()),
               );
             } else {
-              return showMatchContainer(
+              return
+  
+               showMatchContainer(
                 details: allmatchesController.allMatches[index],
                 onTap: () {
                   // Handle onTap

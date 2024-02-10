@@ -108,7 +108,7 @@ class _CricketHomePageState extends State<CricketHomePage>
       appBar: AppBar(
         leading: const ShapeIcon(
           icon: MyImages.filter,
-          height: 18,
+          height: 50,
           width: 430,
         ),
         bottom: TabBar(

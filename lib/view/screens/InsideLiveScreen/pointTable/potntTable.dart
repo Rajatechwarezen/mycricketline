@@ -1,175 +1,175 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sprotbuzz/core/utilis/borderbox.dart';
 import 'package:sprotbuzz/core/utilis/my_color.dart';
 import 'package:sprotbuzz/core/utilis/style.dart';
-import 'package:sprotbuzz/view/component/text/small_text.dart';
+import 'package:sprotbuzz/view/component/custom_loader/custom_loader.dart';
+import '../../../../data/controller/pointTable_controller/poitntTable_controller.dart';
+import '../../../../data/repo/PointTable_repo/PointTableRepo.dart';
 
 class PointTableSreen extends StatefulWidget {
   final idmatch;
 
-  const PointTableSreen({required this.idmatch});
+  const PointTableSreen({super.key, required this.idmatch});
 
   @override
   State<PointTableSreen> createState() => _PointTableSreenState();
 }
 
 class _PointTableSreenState extends State<PointTableSreen> {
+  final PointTableContrller allmatchesController = Get.put(PointTableContrller(
+      rointTableRepo: PointTableRepo(apiClient: Get.find())));
+
+  @override
+  void initState() {
+    super.initState();
+    allmatchesController.pointTableData(id: widget.idmatch.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
 
-   
-    return Container(
+    return allmatchesController.isLoading.value  ? const CustomLoader():  Container(
       height: 300,
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(5),
       child: ListView(
-        children:  [
-        SmallText(text: "Point Table " ,textStyle:interBoldExtraLarge.copyWith(color: MyColor.getTextColor()) )
-    
+        children: [
+          _buildHeaderRow(context),
+          ...allmatchesController.pointTables.map((teamData) {
+            return _buildDataRow(
+              context,
+              teamData.flag,
+              teamData.teams,
+              teamData.p,
+              teamData.w,
+              teamData.l,
+              teamData.nr,
+              teamData.pts,
+              teamData.nrr,
+            );
+          }).toList(),
         ],
       ),
     );
   }
 
+  Widget _buildHeaderRow(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+              width: 85,
+              child: _buildTableCellHeading(context, 'Teams', isHeader: true)),
+          SizedBox(
+              width: 40,
+              child: _buildTableCellHeading(context, 'P', isHeader: true)),
+          SizedBox(
+              width: 40,
+              child: _buildTableCellHeading(context, 'W', isHeader: true)),
+          SizedBox(
+              width: 40,
+              child: _buildTableCellHeading(context, 'L', isHeader: true)),
+          SizedBox(
+              width: 40,
+              child: _buildTableCellHeading(context, 'NR', isHeader: true)),
+          SizedBox(
+              width: 40,
+              child: _buildTableCellHeading(context, 'Pts', isHeader: true)),
+          SizedBox(
+              width: 60,
+              child: _buildTableCellHeading(context, 'NRR', isHeader: true)),
+        ],
+      ),
+    );
+  }
 
+  Widget _buildDataRow(
+    BuildContext context,
+    String img,
+    String teams,
+    String p,
+    String w,
+    String l,
+    String nr,
+    String pts,
+    String nrr,
+  ) {
 
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            SizedBox(
+                width: 85,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      height: 20,
+                      width: 20,
+                      decoration: BoxDecoration(
+                        borderRadius: boRadiusAll,
+                        image: DecorationImage(
+                          image: NetworkImage("$img"),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    _buildTableLeftText(
+                        context, teams),
+                  ],
+                )),
+            SizedBox(width: 40, child: _buildTableCell(context, p)),
+            SizedBox(width: 40, child: _buildTableCell(context, w)),
+            SizedBox(width: 40, child: _buildTableCell(context, l)),
+            SizedBox(width: 40, child: _buildTableCell(context, nr)),
+            SizedBox(width: 40, child: _buildTableCell(context, pts)),
+            SizedBox(width: 60, child: _buildTableCell(context, nrr)),
+          ],
+        ),
+      ),
+    );
+  }
 
-  //  Widget buildRowHeader(Header header) {
+  Widget _buildTableCell(BuildContext context, String text,
+      {bool isHeader = false}) {
+    return Container(
+      alignment: Alignment.center,
+     
+      padding: const EdgeInsets.all(5.0),
+      child: Text(text,
+          style: interLightSmall.copyWith(color: MyColor.getTextColor())),
+    );
+  }
 
-  //   List<Widget> list = new List<Widget>();
-  //   list.add(buildCellHeader(flex: 1,text: header.prefix,textAlign:TextAlign.left));
-  //   list.add(buildCellHeader(flex: 4,text: header.label,textAlign:TextAlign.left));
+  Widget _buildTableCellHeading(BuildContext context, String text,
+      {bool isHeader = false}) {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: MyColor.getCardBg(),
+      ),
+      padding: const EdgeInsets.all(5.0),
+      child: Text(text.toString(),
+          style: interBoldDefault.copyWith(color: MyColor.getTextColor())),
+    );
+  }
 
-  //   if(widget.table.columns >= 1 && header.row1 != null){
-  //     list.add(buildCellHeader(flex: 1,text: (header.row1 != null)? header.row1 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 2 && header.row2 != null){
-  //     list.add(buildCellHeader(flex: 1,text:(header.row2 != null)? header.row2: "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 3 && header.row3 != null){
-  //     list.add(buildCellHeader(flex: 1,text: (header.row3 != null)? header.row3 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 4 && header.row4 != null){
-  //     list.add(buildCellHeader(flex: 1,text: (header.row4 != null)? header.row4 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 5 && header.row5 != null){
-  //     list.add(buildCellHeader(flex: 1,text: (header.row5 != null)? header.row5 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 6 && header.row6 != null){
-  //     list.add(buildCellHeader(flex: 1,text: (header.row6 != null)? header.row6 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 7 && header.row7 != null){
-  //     list.add(buildCellHeader(flex: 1,text: (header.row7 != null)? header.row7 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 8 && header.row8 != null){
-  //     list.add(buildCellHeader(flex: 1,text: (header.row8 != null)? header.row8 : "#",textAlign:TextAlign.center));
-  //   }
-
-  //   return Container(
-  //       height: 40,
-  //       padding: EdgeInsets.symmetric(horizontal: 10),
-  //       width: MediaQuery.of(context).size.width,
-  //       decoration: BoxDecoration(
-  //         border: Border(top: BorderSide(color: Theme.of(context).textTheme.bodyText2.color.withOpacity(0.1),width: 0.5)),
-  //       ),
-  //       child:
-  //       Row(
-  //         mainAxisSize: MainAxisSize.max,
-  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //         children:list,
-  //       )
-  //   );
-  // }
-
-  // Widget buildRow(Line line) {
-
-  //   List<Widget> list = new List<Widget>();
-  //   list.add(buildCellHeader(flex: 1,text: line.prefix,textAlign:TextAlign.left));
-  //   list.add( Expanded(
-  //       flex: 4,
-  //       child: Row(
-  //         children: [
-  //           Image(image: CachedNetworkImageProvider(line.image),height: 15,width: 15,),
-  //           SizedBox(width: 5),
-  //           Flexible(
-  //             child: Text(line.label,
-  //                 maxLines: 1,
-  //                 overflow: TextOverflow.ellipsis,
-  //                 style: TextStyle(
-  //                   color: Theme.of(context).textTheme.bodyText2.color,
-  //                   fontSize: 11,
-  //                 )
-  //             ),
-  //           ),
-  //         ],
-  //       )
-  //   ));
-  //   if(widget.table.columns >= 1){
-  //     list.add(buildCell(flex: 1,text: (line.row1 != null)? line.row1 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 2){
-  //     list.add(buildCell(flex: 1,text: (line.row2 != null)? line.row2 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 3){
-  //     list.add(buildCell(flex: 1,text: (line.row3 != null)? line.row3 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 4){
-  //     list.add(buildCell(flex: 1,text: (line.row4 != null)? line.row4 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 5){
-  //     list.add(buildCell(flex: 1,text: (line.row5 != null)? line.row5 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 6){
-  //     list.add(buildCell(flex: 1,text: (line.row6 != null)? line.row6 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 7){
-  //     list.add(buildCell(flex: 1,text: (line.row7 != null)? line.row7 : "#",textAlign:TextAlign.center));
-  //   }
-  //   if(widget.table.columns >= 8){
-  //     list.add(buildCell(flex: 1,text: (line.row8 != null)? line.row8 : "#",textAlign:TextAlign.center));
-  //   }
-
-  //   return Container(
-  //       padding: EdgeInsets.symmetric(horizontal: 10),
-  //       height: 40,
-  //       width: MediaQuery.of(context).size.width,
-  //       decoration: BoxDecoration(
-  //         color: (line.color == null)? Colors.transparent : Color(int.parse("0xff"+line.color)).withOpacity(0.2),
-  //         border: Border(top: BorderSide(color: Theme.of(context).textTheme.bodyText2.color.withOpacity(0.1),width: 0.5)),
-  //       ),
-  //       child:
-  //       Row(
-  //         mainAxisSize: MainAxisSize.max,
-  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //         children: list,
-  //       )
-  //   );
-  // }
-
-  // buildCellHeader({int flex, String text,TextAlign textAlign}) {
-  //   return Expanded(
-  //     flex: flex ,
-  //     child: Text(text,
-  //         style: TextStyle(
-  //             color: Theme.of(context).textTheme.bodyText1.color,
-  //             fontSize: 12,
-  //             fontWeight: FontWeight.bold
-  //         ),
-  //         textAlign:textAlign
-  //     ),
-  //   );
-  // }
-  // buildCell({int flex, String text,TextAlign textAlign}) {
-  //   return Expanded(
-  //     flex: flex ,
-  //     child: Text(text,
-  //         style: TextStyle(
-  //           color: Theme.of(context).textTheme.bodyText2.color,
-  //           fontSize: 11,
-  //         ),
-  //         textAlign:textAlign
-  //     ),
-  //   );
-  // }
-
+  Widget _buildTableLeftText(BuildContext context, String text,
+      {bool isHeader = false}) {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(color: MyColor.getCardBg()),
+      padding: const EdgeInsets.all(5.0),
+      child: Text(text.toString(),
+          style: interBoldDefault.copyWith(color: MyColor.getTextColor())),
+    );
+  }
 }

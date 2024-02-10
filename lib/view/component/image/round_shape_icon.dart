@@ -29,7 +29,7 @@ final double? height;
       decoration: BoxDecoration(
           color: backgroundColor,
           shape: BoxShape.rectangle,
-          border: Border.all(color: borderColor, width: 0.5)
+
       ),
       child: Image.asset(icon.toString(), color: iconColor, height:  height  , width:width,fit: BoxFit.fill, ),
     );

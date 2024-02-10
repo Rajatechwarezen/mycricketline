@@ -10,18 +10,19 @@ class PointTableRepo{
   PointTableRepo({required this.apiClient});
 
  
-fetchPointTable(id) async {
+ Future<List<PointTable>> fetchPointTable(id) async {
   const url =
-      'http://apicricketchampion.in/webservices/pointsTable/20122cd5366e30f0847774c9d7698d30';
+      'http://apicricketchampion.in/apiv4/pointsTable/68352c40e73f0d00dc1bcab407633cdc';
 
   try {
     var filterId = id.toString().replaceAll("\\p{P}", "");
     final request = http.MultipartRequest('POST', Uri.parse(url));
-    request.fields['series_id'] = "243";
+    request.fields['series_id'] = "313";
 
     final response = await request.send();
 
     if (response.statusCode == 200) {
+
       final responseBody = await response.stream.bytesToString();
       final data = json.decode(responseBody);
 
@@ -29,8 +30,7 @@ fetchPointTable(id) async {
         final List<PointTable> pointTables = (data['data'] as List<dynamic>)
             .map((json) => PointTable.fromJson(json))
             .toList();
-   CustomSnackBar.showCustomSnackBar(errorList: ["Data successfully fetched!"], msg: [], isError: false);
-       
+
 
         return pointTables;
       } else {

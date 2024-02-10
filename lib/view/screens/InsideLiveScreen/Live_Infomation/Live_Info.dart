@@ -45,6 +45,7 @@ class _InfoState extends State<Info> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       infocontroller!.fetcRealTimeData(matchId: widget.id);
+      
     });
   }
 
@@ -62,10 +63,12 @@ class _InfoState extends State<Info> {
               ? CustomLoader()
               : Column(
                   children: [
-                    Column(
+                 infocontroller!.allLiveMatches!.isEmpty ? 
+                 
+                 CustomLoader():
+                   Column(
                       children: infocontroller!.allLiveMatches!.map(
                         (Data) {
-                          print(Data.toss);
                           return Column(
                             children: [
                               Data.toss != null
@@ -94,7 +97,7 @@ class _InfoState extends State<Info> {
                                                   borderRadius: boRadiusAll,
                                                   image: const DecorationImage(
                                                     image: AssetImage(
-                                                        "/assets/images/toss.png"),
+                                                        "assets/images/toss.png"),
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ))
@@ -151,21 +154,7 @@ class _InfoState extends State<Info> {
                                           ),
                                         ],
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          size10w,
-                                          SizedBox(
-                                            width: 40,
-                                            child: Icon(
-                                              Icons.arrow_circle_right_sharp,
-                                              size: 20,
-                                              color: MyColor.getTextColor(),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                      CustomDivider(),
                                       Row(
                                         children: [
                                           CircleImageWidget(
@@ -193,126 +182,106 @@ class _InfoState extends State<Info> {
                                 child: Column(children: [
                                   Row(
                                     children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          size10h,
-                                          SizedBox(
-                                            width: 300,
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text("Match Detail",
-                                                      style: interBoldExtraSmall
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 15,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            size10h,
+                                            SizedBox(
+                                              width: 300,
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text("Match Detail",
+                                                        style: interBoldExtraSmall
+                                                            .copyWith(
+                                                                color: MyColor
+                                                                    .getTextColor1())),
+                                                    size10h,
+                                                    Text(
+                                                      "${Data.dateWise}",
+                                                      style: interBoldSmall
                                                           .copyWith(
                                                               color: MyColor
-                                                                  .getTextColor1())),
-                                                  Text(
-                                                    "${Data.manOfMatch}",
-                                                    style:
-                                                        interBoldSmall.copyWith(
-                                                            color: MyColor
-                                                                .getTextColor()),
-                                                  ),
-                                                  CustomDivider(),
-                                                ]),
-                                          ),
-                                          size10h,
-                                          Row(
-                                            children: [
-                                              Text("Series",
-                                                  style: interBoldExtraSmall
-                                                      .copyWith(
-                                                          color: MyColor
-                                                              .getTextColor1()))
-                                            ],
-                                          ),
-                                          size10h,
-                                          SizedBox(
-                                            width: 300,
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "${Data.series}",
-                                                    style:
-                                                        interBoldSmall.copyWith(
-                                                            color: MyColor
-                                                                .getTextColor()),
-                                                  ),
-                                                  CustomDivider(),
-                                                ]),
-                                          ),
-                                          CustomDivider(),
-                                          size10h,
-                                          Row(
-                                            children: [
-                                              Text("Match",
-                                                  style: interBoldExtraSmall
-                                                      .copyWith(
-                                                          color: MyColor
-                                                              .getTextColor1()))
-                                            ],
-                                          ),
-                                          size10h,
-                                          SizedBox(
-                                            width: 300,
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "${Data.teamA} VS ${Data.teamB}",
-                                                    style: interBoldDefault
-                                                        .copyWith(
-                                                      color: MyColor
-                                                          .getTextColor(),
+                                                                  .getTextColor()),
                                                     ),
-                                                  ),
-                                                  CustomDivider(),
-                                                ]),
-                                          ),
-                                          CustomDivider(),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text("Date & Time",
-                                                  style: interBoldExtraSmall
-                                                      .copyWith(
-                                                          color: MyColor
-                                                              .getTextColor1())),
-                                              size10h,
-                                              Text(
-                                                " ${Data.matchTime} - ${Data.matchDate}  ",
-                                                style: interBoldSmall.copyWith(
-                                                    color:
-                                                        MyColor.getTextColor()),
-                                              )
-                                            ],
-                                          ),
-                                          size10h,
-                                          Row(
-                                            children: [
-                                              Text("Match No  ",
-                                                  style: interBoldExtraSmall
-                                                      .copyWith(
-                                                          color: MyColor
-                                                              .getTextColor1()))
-                                            ],
-                                          ),
-                                          size10h,
-                                          SizedBox(
-                                            width: 300,
-                                            child: Column(
+                                                    const CustomDivider(),
+                                                  ]),
+                                            ),
+                                            size10h,
+                                            Row(
+                                              children: [
+                                                Text("Series",
+                                                    style: interBoldExtraSmall
+                                                        .copyWith(
+                                                            color: MyColor
+                                                                .getTextColor1()))
+                                              ],
+                                            ),
+                                            size10h,
+                                            SizedBox(
+                                              width: 300,
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "${Data.series}",
+                                                      style: interBoldSmall
+                                                          .copyWith(
+                                                              color: MyColor
+                                                                  .getTextColor()),
+                                                    ),
+                                                    CustomDivider(),
+                                                  ]),
+                                            ),
+                                            CustomDivider(),
+                                            size10h,
+                                            Row(
+                                              children: [
+                                                Text("Match",
+                                                    style: interBoldExtraSmall
+                                                        .copyWith(
+                                                            color: MyColor
+                                                                .getTextColor1()))
+                                              ],
+                                            ),
+                                            size10h,
+                                            SizedBox(
+                                              width: 300,
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "${Data.teamA} VS ${Data.teamB}",
+                                                      style: interBoldDefault
+                                                          .copyWith(
+                                                        color: MyColor
+                                                            .getTextColor(),
+                                                      ),
+                                                    ),
+                                                    CustomDivider(),
+                                                  ]),
+                                            ),
+                                            CustomDivider(),
+                                            Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
+                                                Text("Date & Time",
+                                                    style: interBoldExtraSmall
+                                                        .copyWith(
+                                                            color: MyColor
+                                                                .getTextColor1())),
+                                                size10h,
                                                 Text(
-                                                  "${Data.match} ",
+                                                  " ${Data.matchTime} - ${Data.matchDate}  ",
                                                   style:
                                                       interBoldSmall.copyWith(
                                                           color: MyColor
@@ -320,43 +289,146 @@ class _InfoState extends State<Info> {
                                                 )
                                               ],
                                             ),
-                                          ),
-                                          size10h,
-                                          Row(
-                                            children: [
-                                              Text("venu ",
-                                                  style: interBoldExtraSmall
-                                                      .copyWith(
-                                                          color: MyColor
-                                                              .getTextColor1()))
-                                            ],
-                                          ),
-                                          size10h,
-                                          SizedBox(
-                                            width: 300,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                            size10h,
+                                            Row(
                                               children: [
-                                                Text(
-                                                  "${Data.venue}",
-                                                  style:
-                                                      interBoldSmall.copyWith(
-                                                          color: MyColor
-                                                              .getTextColor()),
-                                                )
+                                                Text("Match No  ",
+                                                    style: interBoldExtraSmall
+                                                        .copyWith(
+                                                            color: MyColor
+                                                                .getTextColor1()))
                                               ],
                                             ),
-                                          ),
-                                          size10h,
-                                        ],
+                                            size10h,
+                                            SizedBox(
+                                              width: 300,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${Data.match} ",
+                                                    style:
+                                                        interBoldSmall.copyWith(
+                                                            color: MyColor
+                                                                .getTextColor()),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            size10h,
+                                            Row(
+                                              children: [
+                                                Text("venu ",
+                                                    style: interBoldExtraSmall
+                                                        .copyWith(
+                                                            color: MyColor
+                                                                .getTextColor1()))
+                                              ],
+                                            ),
+                                            size10h,
+                                            SizedBox(
+                                              width: 300,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${Data.venue}",
+                                                    style:
+                                                        interBoldSmall.copyWith(
+                                                            color: MyColor
+                                                                .getTextColor()),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            size10h,
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ]),
                               ),
+                              cardBoxUi(
+                                  screenWidth: screenWidth,
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        width: 300,
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                               Text("Venue  ",
+                                                  style: interBoldExtraSmall 
+                                                      .copyWith(
+                                                          color: MyColor
+                                                              .getTextColor1())),
+                                              Row(
+                                                children: [
+                                                  CircleImageWidget(
+                                                      border: 1,
+                                                      isAsset: false,
+                                                      imagePath:
+                                                          Data.venueWeather.weatherIcon?? ""),
+                                                              Text(Data.venueWeather.weather?? "", style: interBoldExtraSmall 
+                                                      .copyWith(
+                                                          color: MyColor
+                                                              .getTextColor1())),
+                                                ],
+                                              ),
+                                             
+                                              size10h,
+                                          
+                                              const CustomDivider(),
+                                            ]),
+                                      ),
+                                    ],
+                                  )),
+                     
+                       
+                              //////////////////////////////////////////////////////////////////venueWeather
+                      cardBoxUi(
+                                  screenWidth: screenWidth,
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        width: 300,
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                               Text("Venue Weather ",
+                                                  style: interBoldExtraSmall 
+                                                      .copyWith(
+                                                          color: MyColor
+                                                              .getTextColor1())),
+                                              Row(
+                                                children: [
+                                                  CircleImageWidget(
+                                                      border: 1,
+                                                      isAsset: false,
+                                                      imagePath:
+                                                          Data.venueWeather.weatherIcon?? ""),
+                                                              Text(Data.venueWeather.weather?? "", style: interBoldExtraSmall 
+                                                      .copyWith(
+                                                          color: MyColor
+                                                              .getTextColor1())),
+                                                ],
+                                              ),
+                                             
+                                              size10h,
+                                          
+                                              const CustomDivider(),
+                                            ]),
+                                      ),
+                                    ],
+                                  )),
 
-                              // ////////////////////////////////////////////////////////////////yetToBet
+                            
+                              //////////////////////////////////////////////////////////////////yetToBet
 
                               Data.referee == "" && Data.umpire == " "
                                   ? Container(
@@ -445,7 +517,7 @@ class _InfoState extends State<Info> {
                             ],
                           );
                         },
-                      ).toList(),
+                      ).toList()
                     ),
                   ],
                 ),

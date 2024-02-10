@@ -7,29 +7,28 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:sprotbuzz/core/utilis/borderbox.dart';
 import 'package:sprotbuzz/core/utilis/boxSpace.dart';
 import 'package:sprotbuzz/core/utilis/my_color.dart';
+import 'package:sprotbuzz/core/utilis/my_strings.dart';
 import 'package:sprotbuzz/view/screens/InsideLiveScreen/Real_Time_Live/RealTimecomponent/RealTimecomponent.dart';
 
 import '../../../../../../core/utilis/style.dart';
 import '../../../../../../data/model/home_page_models.dart';
 import '../../../../../../data/model/real_time_model/RealTimeModel.dart';
 import '../../../../home/home_page_componet/carousel/widget/Widget.dart';
-  String? previousText ="";
-    bool isSoundEnabled = true;
+import '../../RealTimecomponent/gifShow.dart';
+
+String? previousText = "";
+bool isSoundEnabled = true;
 Widget myLiveMatchComponent({
-  required  context,
+  required context,
   required Function setState,
   required String type,
   required LiveMatchFull matchData,
   required var remainingSeconds,
-
 }) {
   late Timer timer;
   FlutterTts flutterTts = FlutterTts();
 
-
-
-  
-    Future<void> speak(String text) async {
+  Future<void> speak(String text) async {
     if (isSoundEnabled && text != previousText) {
       previousText = text;
 
@@ -50,203 +49,264 @@ Widget myLiveMatchComponent({
 
   final screenWidth = MediaQuery.of(context).size.width;
   List<Widget> widgetsTeamScore = [];
-speak(matchData.firstCircle.toString());
-  return 
-    SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child:
-       Expanded(
-        flex: 1,
-        child: Container(
-          width:screenWidth * 0.9 ,
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: MyColor.getCardBg(),
-            borderRadius: boRadiusAll,
-            border: border,
-          ),
-          child: type != "Upcoming"
-              ? Stack(
-                  children: [
-                    Positioned(
-                      top: 10,
-                      left: 160,
-                      child: Text(
-                        "${matchData.matchType}",
-                        style: interSemiBoldExtraSmall.copyWith(
-                          color: MyColor.getTextColor(),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            isSoundEnabled = !isSoundEnabled;
-                          });
-                        },
-                        child: Icon(
-                        
-                          isSoundEnabled ? Icons.volume_up : Icons.volume_off,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                          Row(
+  speak(matchData.firstCircle.toString());
 
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                            
-                                Column(
-                                  children: [
-                                       
-                      
-                                    Container(
-                                      height: 30,
-                                      width: 30,
-                                      margin: const EdgeInsets.only(
-                                        top: 5,
-                                        left: 10,
-                                        right: 10,
-                                      ),
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: boRadiusAll,
-                                        border: border,
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                            matchData.battingTeam ==
-                                                    matchData.teamAId.toString()
-                                                ? matchData.teamAImg.toString()
-                                                : matchData.teamBImg.toString(),
-                                          ),
-                                          fit: BoxFit.fitHeight,
-                                        ),
-                                      ),
-                                    ),
-                                 
-                                                Container(
-                                      margin: const EdgeInsets.only(top: 5),
-                                      child: Text(
-                                        matchData.battingTeam.toString() ==
-                                                matchData.teamAId.toString()
-                                            ? matchData.teamAShort.toString()
-                                            : matchData.teamBShort.toString(),
-                                        style: interSemiBoldExtraSmall.copyWith(
-                                          color: MyColor.getTextColor(),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                               
-                               
-                             Row(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(right: 10,),
-                                          child: Text(
-                                            matchData.battingTeam.toString() ==
-                                                    matchData.teamAId.toString()
-                                                ? matchData.teamAScores
-                                                    .toString()
-                                                    .split("&")[0]
-                                                : matchData.teamBScore
-                                                    .toString()
-                                                    .split("&")[0]
-                                                    .replaceAll('\n', ''),
-                                            style:
-                                                interBoldHeader2.copyWith(
-                                              color: MyColor.getTextColor(),
-                                            ),
-                                          ),
-                                        ),
-                                        
-                                        SizedBox(
-                                           child: Text(
-                                            matchData.battingTeam ==
-                                                    matchData.teamAId
-                                                ? "${ matchData.teamBScoresOver![0].over.toString()} "
-                                                : "${matchData.teamAScoresOver![0].over.toString()} "                                  
-                                                   ,
-                                            style: interSemiBoldExtraSmall.copyWith(
-                                              color: MyColor.getTextColor(),
-                                            ),
-                                          ),
-                                        ),
-                                        
-                                      ],
-                                    ),
-                              ],
+  // gif(matchData,widgetsTeamScore);
+
+                    if (matchData.firstCircle.toString().contains("Six")) {
+                      widgetsTeamScore.add(Text(""));
+
+                      widgetsTeamScore.add(
+                        Center(
+                          child: Container(
+                            width: 100,
+                            height: 60,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color:  MyColor.getCardBg(),
+                              borderRadius: boRadius5,
+                              image: const DecorationImage(
+                                image: AssetImage("assets/six.gif"),
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                         
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (matchData.firstCircle.toString().contains("four")) {
+                  
+                      widgetsTeamScore.add(
+                        Center(
+                          child: Container(
+                            width: 100,
+                            height: 60,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color:  MyColor.getCardBg(),
+                              borderRadius:boRadius5,
+                              image: const DecorationImage(
+                                image: AssetImage("assets/four.gif"),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+  return SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: Container(
+      width: screenWidth * 1,
+      height:90,
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: border,
+      ),
+      child: type != "Upcoming"
+          ? Stack(
+              children: [
+             
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        isSoundEnabled = !isSoundEnabled;
+                      });
+                    },
+                    child: Icon(
+                      isSoundEnabled ? Icons.volume_up : Icons.volume_off,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            matchData.firstCircle.toString().contains("Six") ||
-                                    matchData.firstCircle.toString().contains("0")
-                                ? Row(
-                                    children: widgetsTeamScore,
-                                  )
-                                : SizedBox(
-                                    width: screenWidth * 0.3,
+                             
+                            Container(
+                              height: 40,
+                              width: 40,
+                              margin: const EdgeInsets.only(
+                                top: 5,
+                                left: 10,
+                                right: 10,
+                              ),
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                borderRadius: boRadiusAll,
+                                border: border,
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    matchData.battingTeam ==
+                                            matchData.teamAId.toString()
+                                        ? matchData.teamAImg.toString()
+                                        : matchData.teamBImg.toString(),
+                                  ),
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                            ),
+
+
+
+                             Container(
+                              margin: const EdgeInsets.only(top: 5),
+                              child: Text(
+                                matchData.battingTeam.toString() ==
+                                        matchData.teamAId.toString()
+                                    ? matchData.teamAShort.toString()
+                                    : matchData.teamBShort.toString(),
+                                style: interSemiBoldExtraSmall.copyWith(
+                                  color: MyColor.getTextColor(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                       
+                      
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            
+                            matchData.matchType.toString() == "Test"
+                                ? Container(
+                                    margin: const EdgeInsets.only(
+                                      right: 10,
+                                    ),
                                     child: Text(
-                                      truncateText(
-                                        matchData.firstCircle
-                                            .toString()
-                                            .replaceAll('\n', ''),
-                                        15,
+                                      matchData.battingTeam ==
+                                            matchData.teamAId.toString()
+                                          ? matchData.teamAScores
+                                              .toString()
+                                              .split("&")
+                                              .last
+                                          : matchData.teamBScore
+                                              .toString()
+                                              .split("&")
+                                              .last
+                                              .replaceAll('\n', ''),
+                                      style: interBoldHeader2.copyWith(
+                                        color:MyColor.mycolorGolden,
                                       ),
+                                    ),
+                                  )
+                                : Container(
+                                    margin: const EdgeInsets.only(
+                                      right: 10,
+                                    ),
+                                    child: Text(
+                                      matchData.battingTeam ==
+                                            matchData.teamAId.toString()
+                                          ? matchData.teamAScores.toString()
+                                          : matchData.teamBScores.toString(),
+                                      style: interBoldHeader2.copyWith(
+                                        color: MyColor.mycolorGolden,
+                                      ),
+                                    ),
+                                  ),
+
+                            //Over ==================================
+                            matchData.matchType.toString() == "Test"
+                                ? SizedBox(
+                                    child: Text(
+                                   matchData.battingTeam ==
+                                            matchData.teamAId.toString()
+                                          ? "${matchData.teamAScoresOver!.last.over.toString()} "
+                                          : "${matchData.teamBScoresOver!.last.over.toString()} ",
                                       style: interSemiBoldExtraSmall.copyWith(
                                         color: MyColor.getTextColor(),
                                       ),
-                                      textAlign: TextAlign.center,
                                     ),
                                   )
+                                : matchData.battingTeam == matchData.teamAId
+                                    ? Text(
+                                        "${matchData.teamAOver}",
+                                        style: interSemiBoldExtraSmall.copyWith(
+                                          color: MyColor.getTextColor(),
+                                        ),
+                                      )
+                                    : Text(
+                                        "${matchData.teamBover}",
+                                        style: interSemiBoldExtraSmall.copyWith(
+                                          color: MyColor.getTextColor(),
+                                        ),
+                                      )
                           ],
-                        ),
+                        )
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        matchData.firstCircle.toString().contains("Six") ||
+                                matchData.firstCircle.toString().contains("0")
+                            ? Row(
+                                children: widgetsTeamScore,
+                              )
+                            : SizedBox(
+                                width: screenWidth * 0.3,
+                                child: Text(
+                                  truncateText(
+                                    matchData.firstCircle
+                                        .toString()
+                                        .replaceAll('\n', ''),
+                                    15,
+                                    
+                                  ),
+                                  style: interBoldExtraLarge.copyWith(
+                                    color: MyColor.getTextColor(),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
                       ],
                     ),
                   ],
-                )
-              : SizedBox(
-                  width: screenWidth * 0.8,
-                  child: Column(
-                    children: [
-                      Text(
-                        matchData.matchType,
-                        style: InterSemiBold.copyWith(
-                          color: MyColor.getTextColor(),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: boRadiusAll,
-                          color: MyColor.getTextColor(),
-                          border: border,
-                        ),
-                        child: CountdownTimerWidget(
-                          totalSeconds: remainingSeconds,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
-        ),
-      ),
-    );
-
+              ],
+            )
+          : SizedBox(
+              width: screenWidth * 0.8,
+              child: Column(
+                children: [
+                  Text(
+                    matchData.matchType,
+                    style: InterSemiBold.copyWith(
+                      color: MyColor.getTextColor(),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: boRadiusAll,
+                      color: MyColor.getTextColor(),
+                      border: border,
+                    ),
+                    child: CountdownTimerWidget(
+                      totalSeconds: remainingSeconds,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+    ),
+  );
 }
 
+// ignore: must_be_immutable
 class FinshMatchInLive extends StatefulWidget {
   final String type;
   LiveMatchFull matchData;
@@ -475,7 +535,7 @@ class _PiPComponetState extends State<PiPComponet> {
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     width: 84,
                                     child: Text(
                                         widget.matchData.battingTeam

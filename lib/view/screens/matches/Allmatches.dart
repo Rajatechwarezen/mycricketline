@@ -46,7 +46,7 @@ class _AllMatchesState extends State<AllMatches>   with SingleTickerProviderStat
       child:  
    Scaffold(
       appBar: AppBar(
-        leading: const ShapeIcon(icon: MyImages.filter,height: 18, width: 430,),
+        leading: const ShapeIcon(icon: MyImages.appLogo,height: 18, width: 430,),
         bottom: TabBar(
           labelColor: MyColor.getPrimaryTextColor(),
           indicatorColor: MyColor.getPrimaryTextColor(),

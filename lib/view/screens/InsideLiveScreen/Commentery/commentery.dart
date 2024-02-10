@@ -36,9 +36,12 @@ class _CommentaryState extends State<Commentary> {
   }
 
   void fetchData() async {
-    await commenteryController.commenteryfatchData(widget.idMatch);
-    commentaryApiMatches = commenteryController.allLiveMatches![0];
+    var data  = await commenteryController.commenteryfatchData(idMatch:widget.idMatch);
 
+    if(data!=null) {
+      commentaryApiMatches = commenteryController.allLiveMatches![0];
+    }
+    
     if (commentaryApiMatches != null) {
       setState(() {
         isExpandedList =

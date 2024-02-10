@@ -15,23 +15,27 @@ class CommenteryController extends GetxController {
   final ApiClient apiClient = Get.find();
 
 
- commenteryfatchData(idMatch, {matchId}) async {
+ commenteryfatchData({idMatch}) async {
+
     try {
       List<CricketMatch>? matches =
-          await commenteryRepo.CommenterygetData("$matchId");
+          await commenteryRepo.commenterygetData(id: idMatch.toString());
 
       if (matches!.isNotEmpty) {
         allLiveMatches = matches;
-
-      
-
+        
         updateLoading(false);
         update();
+ return matches;
+      
+
       } else {
         CustomSnackBar.showCustomSnackBar(
             errorList: [matches.toString()],
             msg: [MyStrings.error],
             isError: true);
+             return [];
+      
       }
     } catch (error) {
       updateLoading(false);

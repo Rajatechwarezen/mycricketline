@@ -344,6 +344,7 @@ isLiked = isCheckLike!.any((element) =>
                         // Navigator.pushNamed(context, PageRoutes.userProfilePage);
                       },
                       child: const CircleAvatar(
+                     
                           backgroundImage: AssetImage('assets/images/logo.png')),
                     ),
                     CustomButton(

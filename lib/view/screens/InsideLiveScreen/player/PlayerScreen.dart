@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sprotbuzz/core/utilis/boxSpace.dart';
 import 'package:sprotbuzz/data/repo/player_repo/Player_Repo.dart';
 import 'package:sprotbuzz/view/component/custom_loader/custom_loader.dart';
 
@@ -21,7 +22,7 @@ class CricketPlayerListState extends StatefulWidget {
 }
 
 class _CricketPlayerListStateState extends State<CricketPlayerListState> {
-     bool isPlayerListVisible = true; 
+
 
      PlayerController realTimeDataController = Get.put(
       PlayerController(realTimeRepo: PlayerRepo(apiClient: Get.find())));
@@ -34,83 +35,87 @@ class _CricketPlayerListStateState extends State<CricketPlayerListState> {
   }
   @override
   Widget build(BuildContext context) {
-    MatchData matchData = realTimeDataController.playerMatchesList![0];
-    return  Obx(()=>realTimeDataController.isLoading.value ? const CustomLoader(): 
+
+      
     
-          
-  matchData == null ?
-   CustomLoader() : SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: 
-       ListView.builder(
-         scrollDirection: Axis.horizontal,
-         itemCount: 2, // Assuming there are two teams in the match
-         itemBuilder: (context, index) {
-           TeamData teamData =
-               (index == 0) ? matchData.teamA : matchData.teamB;
-           return Container(
-             width: 170,
-             margin: EdgeInsets.symmetric(horizontal: 10),
-             child: Column(
-               children: [
-                 GestureDetector(
-                   onTap: () {
-                     setState(() {
-                       isPlayerListVisible = !isPlayerListVisible;
-                     });
-                   },
-                   child: Container(
-                     padding: EdgeInsets.all(10),
-                     child: Row(
-                       children: [
-                         CircleAvatar(
-                           backgroundImage: NetworkImage(teamData.flag),
-                           radius: 20,
-                         ),
-                         SizedBox(width: 10),
-                         Column(
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                           children: [
-                             Text(
-                               teamData.shortName,
-                               style:interBoldDefault.copyWith(color: MyColor.getTextColor()),
-                             ),
-                           ],
-                         ),
-                         Spacer(),
-                       ],
-                     ),
-                   ),
-                 ),
-                 const CustomDivider(
+    
+ return   
+   GetBuilder<PlayerController>(builder: (controller){  
+     
+    return controller.isLoading.value ? const CustomLoader() :   Container(
+      decoration: BoxDecoration(color: MyColor.getCardBg()),
+      child: SizedBox(
+        height: 600,
+        child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          physics: BouncingScrollPhysics(),
+          itemCount: 2, // Assuming there are two teams in the match
+          itemBuilder: (context, index) {
+            TeamData teamData =
+                (index == 0) ?  realTimeDataController.playerMatchesList![0].teamA :  realTimeDataController.playerMatchesList![0].teamB;
+            return Container(
+              width: 170,
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                           size10w,
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(teamData.flag),
+                          radius: 20,
+                        ),
+                        size20w,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              teamData.shortName,
+                              style:interBoldDefault.copyWith(color: MyColor.getTextColor()),
+                            ),
+                          ],
+                        ),
+                                  Spacer(),
+                      ],
                     ),
-                 if (isPlayerListVisible)
-                   Column(
-                     children: teamData.players!.map((player) {
-                       return ListTile(
-                         isThreeLine: true,
-                         dense: true,
-                         leading: CircleAvatar(
-                           backgroundImage: NetworkImage(player.image),
-                           radius: 20,
-                         ),
-                         title: Text(player.name,
-                             style:interBoldDefault.copyWith(color: MyColor.getTextFieldBg()),
-                           ),
-                         subtitle: Text(player.playRole,
-                             style:interBoldDefault.copyWith(color: MyColor.getTextFieldBg()),
-                           ),
-                       );
-                     }).toList(),
-                   ),
-               ],
-             ),
-           );
-         },
-       ),
-         ),
-    
+                  ),
+                  const CustomDivider(),
+                
+                    SizedBox(
+                      height: 510,
+                      child: ListView(
+                        shrinkWrap:true,
+                        children: teamData.players.map((player) {
+                          return ListTile(
+                            isThreeLine: true,
+                            dense: true,
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(player.image),
+                              radius: 20,
+                            ),
+                            title: Text(player.name,
+                                style:interBoldExtraSmall.copyWith(color: MyColor.getTextColor()),
+                              ),
+                            subtitle: Text(player.playRole,
+                                style:interBoldExtraSmall.copyWith(color: MyColor.getTextColor()),
+                              ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
     );
+    
+   } );
   }
 }
 void _navigateToPlayerList(BuildContext context, TeamData teamData) {

@@ -10,15 +10,14 @@ class CommenteryRepo {
   ApiClient apiClient;
   CommenteryRepo({required this.apiClient});
 
-  Future CommenterygetData(id) async {
+  Future commenterygetData({id}) async {
     String apiUrl = UrlContainer.commenteryUrl;
-
+    
     var response = await apiClient.requestForm(
       apiUrl,
       Method.postMethod,
-      "3766",
+      id,
     );
-
     if (response != null && response.isSuccess) {
       var result = response.responseJson;
       var liveMatchJsonDecode = json.decode(result);

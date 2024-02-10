@@ -14,6 +14,7 @@ class UrlContainer{
   static const String liveMatchUrl = "http://apicricketchampion.in/apiv4/liveMatchList/68352c40e73f0d00dc1bcab407633cdc";
 
   static const String informtionMatchUrl = "http://apicricketchampion.in/apiv4/matchInfo/68352c40e73f0d00dc1bcab407633cdc";
+  static const String inofvanueIdhUrl = "http://apicricketchampion.in/apiv4/venuesDetail/68352c40e73f0d00dc1bcab407633cdc";
 
   static const String commenteryUrl = "http://apicricketchampion.in/apiv4/commentary/68352c40e73f0d00dc1bcab407633cdc";
   static const String  playersByMatchId=  'http://apicricketchampion.in/apiv4/playingXiByMatchId/68352c40e73f0d00dc1bcab407633cdc';

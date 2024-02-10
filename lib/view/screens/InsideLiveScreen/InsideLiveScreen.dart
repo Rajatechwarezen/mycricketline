@@ -7,6 +7,7 @@ import 'package:sprotbuzz/view/component/appbar/custom_appbar.dart';
 import 'package:sprotbuzz/view/screens/InsideLiveScreen/Commentery/commentery.dart';
 import 'package:sprotbuzz/view/screens/InsideLiveScreen/Real_Time_Live/RealTimeLiveScreen.dart';
 import 'package:sprotbuzz/view/screens/InsideLiveScreen/ScoreCard/ScoreCard.dart';
+import 'package:sprotbuzz/view/screens/InsideLiveScreen/oddTable/oddTable.dart';
 
 import '../../../core/utilis/my_strings.dart';
 import '../../../core/utilis/style.dart';
@@ -18,7 +19,7 @@ class InsideLiveScreenTab extends StatefulWidget {
   var idMatch;
   var type;
   // var data;
-  LiveMatch? allData;
+var allData;
   InsideLiveScreenTab(
       {super.key,
       required this.idMatch,
@@ -56,7 +57,7 @@ class _InsideLiveScreenTabState extends State<InsideLiveScreenTab>
           title: widget.type,
         ),
         body: DefaultTabController(
-          length: 5,
+          length: 6,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,7 +72,10 @@ class _InsideLiveScreenTabState extends State<InsideLiveScreenTab>
                   MyTab(MyStrings.liveinfo),
                   MyTab(MyStrings.livecom),
                   MyTab(MyStrings.livescard),
+                    MyTab(MyStrings.tfrodds),
+              
                   MyTab(MyStrings.liveptable),
+                  
                 ],
               ),
               Expanded(
@@ -90,6 +94,8 @@ class _InsideLiveScreenTabState extends State<InsideLiveScreenTab>
                     ),
                     Commentary(idMatch: widget.idMatch),
                     ScoreTable(idMatch: widget.idMatch),
+                   OddTableSreen(idmatch: widget.idMatch),
+                 
                     PointTableSreen(idmatch: widget.idMatch),
                   ],
                 ),

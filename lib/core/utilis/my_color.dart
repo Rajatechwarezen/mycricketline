@@ -25,7 +25,7 @@ class MyColor{
   static const Color mysecondaryTextColor = Color(0xffCBA352);
   static const Color mysmallTextColor = Color(0xffE7E9EA);
   static const Color mylabelTextColor = Color(0xffB8BEC1);
-  static const Color myhintTextColor =  Color.fromARGB(255, 15, 104, 136);
+  static const Color myhintTextColor =  Color(0xFF0F6888);
 
   static const Color mycolorWhite = Color(0xffFFFFFF);
   static const Color mycolorBlack = Color(0xff262626);

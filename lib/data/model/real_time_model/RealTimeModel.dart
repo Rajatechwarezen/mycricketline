@@ -108,49 +108,49 @@ class LiveMatchFull {
 
   factory LiveMatchFull.fromJson(Map<String, dynamic>? json) {
     return LiveMatchFull(
-        runneed: json?["run_need"] ?? "-",
-        rRRate: json?["rr_rate"] ?? "-",
-        target: json?["target"] ?? "-",
-        matchId: json?['match_id'] ?? "-",
-        seriesId: json?['series_id'] ?? "-",
-        tvId: json?['tv_id'] ?? "-",
-        matchOver: json?['match_over'] ?? "-",
-        minRate: json?['min_rate'] ?? "-",
-        maxRate: json?['max_rate'] ?? "-",
-        favTeam: json?['fav_team'] ?? "-",
-        toss: json?['toss'] ?? "-",
-        minRate2: json?["min_rate_2"] ?? "-",
-        maxRate2: json?["max_rate_2"] ?? "-",
-        result: json?['result'] ?? "-",
-        matchType: json?['match_type'] ?? "-",
-        powerplay: json?['powerplay'] ?? "-",
-        sOvr: json?['s_ovr'] ?? "-",
-        sMin: json?['s_min'] ?? "-",
-        sMax: json?['s_max'] ?? "-",
-        teamAId: json?['team_a_id'] ?? "-",
-        teamA: json?['team_a'] ?? "-",
-        teamAShort: json?['team_a_short'] ?? "-",
-        teamAImg: json?['team_a_img'] ?? "-",
-        teamBId: json?['team_b_id'] ?? "-",
-        teamB: json?['team_b'] ?? "-",
+        runneed: json?["run_need"] ?? "",
+        rRRate: json?["rr_rate"] ?? "",
+        target: json?["target"] ?? "",
+        matchId: json?['match_id'] ?? "",
+        seriesId: json?['series_id'] ?? "",
+        tvId: json?['tv_id'] ?? "",
+        matchOver: json?['match_over'] ?? "",
+        minRate: json?['min_rate'] ?? "",
+        maxRate: json?['max_rate'] ?? "",
+        favTeam: json?['fav_team'] ?? "",
+        toss: json?['toss'] ?? "",
+        minRate2: json?["min_rate_2"] ?? "",
+        maxRate2: json?["max_rate_2"] ?? "",
+        result: json?['result'] ?? "",
+        matchType: json?['match_type'] ?? "",
+        powerplay: json?['powerplay'] ?? "",
+        sOvr: json?['s_ovr'] ?? "",
+        sMin: json?['s_min'] ?? "",
+        sMax: json?['s_max'] ?? "",
+        teamAId: json?['team_a_id'] ?? "",
+        teamA: json?['team_a'] ?? "",
+        teamAShort: json?['team_a_short'] ?? "",
+        teamAImg: json?['team_a_img'] ?? "",
+        teamBId: json?['team_b_id'] ?? "",
+        teamB: json?['team_b'] ?? "",
         teamBScores: json?['team_b_scores'],
         teamBScore:  TeamScore.fromJson(json?['team_b_score']) ,
         teamBover: json?['team_b_over'],
-        teamBShort: json?['team_b_short'] ?? "-",
-        teamBImg: json?['team_b_img'] ?? "-",
+        teamBShort: json?['team_b_short'] ?? "",
+        teamBImg: json?['team_b_img'] ?? "",
         nextBatsman: json?['next_batsman'],
-        currentInning: json?['current_inning'] ?? "-",
+        currentInning: json?['current_inning'] ?? "",
         batsmen: (json?['batsman'] as List<dynamic>?)
             ?.map((x) => Batsman.fromJson(x))
             .toList(),
         bowler: Bowler.fromJson(json?['bolwer']),
-        firstCircle: json?['first_circle'] ?? "-",
-        secondCircle: json?['second_circle'] ?? "-",
-        ballingTeam: json?['balling_team'] ?? "-",
-        battingTeam: json?['batting_team'] ?? "-",
+        firstCircle: json?['first_circle'] ?? "",
+        secondCircle: json?['second_circle'] ?? "",
+        ballingTeam: json?['balling_team'] ?? "",
+        battingTeam: json?['batting_team'] ?? "",
         teamAScore: TeamScore.fromJson(json?['team_a_score']),
         teamAScores: json?['team_a_scores'],
-        teamAOver: json?['team_a_over'] ?? "-",
+        teamAOver: json?['team_a_over'] ?? "",
         teamAScoresOver: (json?['team_a_scores_over'] as List<dynamic>?)
             ?.map((x) => TeamScoreOver.fromJson(x))
             .toList(),
@@ -158,12 +158,12 @@ class LiveMatchFull {
             teamBScoresOver:(json?['team_b_scores_over'] as List<dynamic>?)
             ?.map((x) => TeamScoreOver.fromJson(x))
             .toList(),
-        lambiOvr: json?['lambi_ovr'] ?? "-",
-        lambiMin: json?['lambi_min'] ?? "-",
-        lambiMax: json?['lambi_max'] ?? "-",
+        lambiOvr: json?['lambi_ovr'] ?? "",
+        lambiMin: json?['lambi_min'] ?? "",
+        lambiMax: json?['lambi_max'] ?? "",
         partnership: Partnership.fromJson(json?['partnership']),
         yetToBet: (json?['yet_to_bet'] as List<dynamic>?)?.cast<String>(),
-        currRate: json?['curr_rate'] ?? "-",
+        currRate: json?['curr_rate'] ?? "",
         last4Overs: (json?['last4overs'] as List<dynamic>?)
             ?.map((x) => OverStats.fromJson(x))
             .toList(),
@@ -191,12 +191,12 @@ class Batsman {
 
   factory Batsman.fromJson(Map<String, dynamic>? json) {
     return Batsman(
-      name: json?['name' ?? "-"],
-      run: json?['run'] ?? "-",
-      ball: json?['ball'] ?? "-",
-      fours: json?['fours'] ?? "-",
-      sixes: json?['sixes'] ?? "-",
-      strikeRate: json?['strike_rate'] ?? "-",
+      name: json?['name' ?? ""],
+      run: json?['run'] ?? "",
+      ball: json?['ball'] ?? "",
+      fours: json?['fours'] ?? "",
+      sixes: json?['sixes'] ?? "",
+      strikeRate: json?['strike_rate'] ?? "",
     );
   }
 }
@@ -219,11 +219,11 @@ class Bowler {
 
   factory Bowler.fromJson(Map<String, dynamic>? json) {
     return Bowler(
-        name: json?['name'] ?? "-",
-        run: json?['run'] ?? "-",
-        over: json?['over'] ?? "-",
-        wicket: json?['wicket'] ?? "-",
-        economy: json?['economy'] ?? "-",
+        name: json?['name'] ?? "",
+        run: json?['run'] ?? "",
+        over: json?['over'] ?? "",
+        wicket: json?['wicket'] ?? "",
+        economy: json?['economy'] ?? "",
         maidens: json?['maidens'] ?? "0");
   }
 }
@@ -242,9 +242,9 @@ final dynamic over;
 
   factory TeamScore.fromJson(Map<String, dynamic>? json) {
     return TeamScore(
-      score: json?['score'] ?? "-",
-      wicket: json?['wicket'] ?? "-",
-      ball: json?['ball'] ?? "-",
+      score: json?['score'] ?? "",
+      wicket: json?['wicket'] ?? "",
+      ball: json?['ball'] ?? "",
       over:json?["over"] ?? " "
     );
   }
@@ -261,8 +261,8 @@ class TeamScoreOver {
 
   factory TeamScoreOver.fromJson(Map<String, dynamic>? json) {
     return TeamScoreOver(
-      score: json?['score'] ?? "-",
-      over: json?['over'] ?? "-",
+      score: json?['score'] ?? "",
+      over: json?['over'] ?? "",
     );
   }
 }
@@ -280,9 +280,9 @@ class Partnership {
 
   factory Partnership.fromJson(Map<String, dynamic>? json) {
     return Partnership(
-      runs: json?['run'] ?? "-",
-      balls: json?['ball'] ?? "-",
-      wicket: json?['wicket'] ?? "-",
+      runs: json?['run'] ?? "",
+      balls: json?['ball'] ?? "",
+      wicket: json?['wicket'] ?? "",
     );
   }
 }
@@ -301,9 +301,9 @@ class OverStats {
 
   factory OverStats.fromJson(Map<String, dynamic>? json) {
     return OverStats(
-      ball: json?['balls'] ?? "-",
-      ballOver: json?['over'] ?? "-",
-      run: json?['runs'] ?? "-",
+      ball: json?['balls'] ?? "",
+      ballOver: json?['over'] ?? "",
+      run: json?['runs'] ?? "",
     );
   }
 }

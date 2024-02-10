@@ -146,11 +146,11 @@ class ApiClient extends GetxService {
     if (model != "") {
       return ResponseModel(true, "Success", 200, model.toString());
     } else {
-      CustomSnackBar.showCustomSnackBar(
-        errorList: [model.toString()],
-        msg: ["Json decoding error"],
-        isError: true,
-      );
+      // CustomSnackBar.showCustomSnackBar(
+      //   errorList: [model.toString()],
+      //   msg: ["Json decoding error"],
+      //   isError: true,
+      // );
       return ResponseModel(true, MyStrings.serverError.tr, 404,
           model.toString());
     }
@@ -173,10 +173,7 @@ class ApiClient extends GetxService {
 
   ResponseModel handleUnauthorizedResponse() {
     sharedPreferences.setBool(SharedPreferenceHelper.rememberMeKey, false);
-    CustomSnackBar.showCustomSnackBar(
-        errorList: ["This Is Wrong Unauthorized response "],
-        msg: [],
-        isError: true);
+   
     return ResponseModel(false, MyStrings.unAuthorized.tr, 401, '');
   }
 

@@ -79,27 +79,27 @@ class MatchDetailsLayout extends StatelessWidget {
                     cells: [
                       DataCell(Text(
                         batsmen.name.toString(),
-                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                       DataCell(Text(
                         batsmen.run.toString(),
-                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                       DataCell(Text(
                         batsmen.ball.toString(),
-                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                       DataCell(Text(
                         batsmen.fours.toString(),
-                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                       DataCell(Text(
                         batsmen.sixes.toString(),
-                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                       DataCell(Text(
                         batsmen.strikeRate.toString(),
-                        style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ),
+                        style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ),
                       )),
                     ]);
               },
@@ -112,11 +112,11 @@ class MatchDetailsLayout extends StatelessWidget {
           child: DataTable(
             showCheckboxColumn: false,
             horizontalMargin: 10, // Adjust the horizontal margin as needed
-            columnSpacing: 13, // Adjust the spacing between columns as needed
+            columnSpacing: 10, // Adjust the spacing between columns as needed
             columns: [
               DataColumn(
                   label: SizedBox(
-                      width: screenWidth * 0.4,
+                      width: screenWidth * 0.5,
                       child: Text('Bolwer',
                           style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() )))),
               DataColumn(
@@ -133,17 +133,17 @@ class MatchDetailsLayout extends StatelessWidget {
             rows: [
               DataRow(cells: [
                 DataCell(Text(bowlers.bowler!.name.toString(),
-                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ))),
                 DataCell(Text(bowlers.bowler!.economy.toString(),
-                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ))),
                 DataCell(Text(bowlers.bowler!.wicket.toString(),
-                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ))),
                 DataCell(Text(bowlers.bowler!.run.toString(),
-                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ))),
                 DataCell(Text(bowlers.bowler!.maidens.toString(),
-                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ))),
                 DataCell(Text(bowlers.bowler!.over.toString(),
-                    style:  interBoldExtraSmall.copyWith(color: MyColor.getTextColor() ))),
+                    style:  interBoldSmall.copyWith(color: MyColor.getTextColor() ))),
               ]),
             ],
           ),

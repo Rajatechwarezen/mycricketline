@@ -14,39 +14,33 @@ class ScoreTableRepo{
 ScoreTableRepo({required this.apiClient});
 
 
-   
-Future fetchScorecarData(id) async {
 
+Future<ScoreData> fetchScorecarData(String id) async {
+  try {
     String apiUrl = UrlContainer.scoreTable;
 
     var response = await apiClient.requestForm(
       apiUrl,
       Method.postMethod,
-      "3766",
+      id,
     );
 
-  print("${response!.responseJson} ======================66666666666");
-  if (response != null && response.isSuccess) {
+ 
+    if (response != null && response.isSuccess) {
       var result = response.responseJson;
       var liveMatchJsonDecode = json.decode(result);
 
-      if (liveMatchJsonDecode['status'] == true) {
-          if (liveMatchJsonDecode != null) {
-            var inning = ScoreData.fromJson(liveMatchJsonDecode as Map<String, dynamic>);
-
-            return inning;
-          } else {
-            throw Exception('Invalid data format: Unexpected data type');
-          }
+      if (liveMatchJsonDecode != null && liveMatchJsonDecode['status'] == true) {
+        return ScoreData.fromJson(liveMatchJsonDecode as Map<String, dynamic>);
       } else {
-        print('API response indicates failure: ${liveMatchJsonDecode['message']}');
+        throw Exception('Invalid data format or status is false: $liveMatchJsonDecode');
       }
     } else {
-      print('API request failed. Status code: ${response?.statusCode ?? "unknown"}');
+      throw Exception('API request failed. Status code: ${response?.statusCode ?? "unknown"}');
     }
-
-   
-
+  } catch (e) {
+    print('Error during scorecard data fetching: $e');
+    rethrow; // rethrow the exception for better debugging
+  }
 }
-
 }
