@@ -38,7 +38,7 @@ class _InsideLiveScreenTabState extends State<InsideLiveScreenTab>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 5,
+      length: 6,
       vsync: this,
     );
   }
@@ -63,7 +63,7 @@ class _InsideLiveScreenTabState extends State<InsideLiveScreenTab>
             children: [
               TabBar(
                 labelColor: MyColor.getPrimaryTextColor(),
-                indicatorColor: MyColor.getPrimaryTextColor(),
+                indicatorColor: MyColor.mycardBorderColor,
                 isScrollable: true,
                 controller: _tabController,
                 dividerColor: MyColor.mytransparentColor,

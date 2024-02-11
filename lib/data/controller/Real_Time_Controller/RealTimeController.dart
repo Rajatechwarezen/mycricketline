@@ -23,6 +23,7 @@ class RealTimeController extends GetxController {
   RealTimeController({required this.realTimeRepo}) ;
 
   void initData(id) async {
+      
     try {
       List<LiveMatchFull>? matches = await realTimeRepo.getRealTimeData("$id");
       if (matches != null && matches.isNotEmpty) {

@@ -23,8 +23,7 @@ Future getRealTimeData(id) async {
     if (response != null && response.isSuccess) {
       var result = response.responseJson;
       var liveMatchJsonDecode = json.decode(result);
-
-      if (liveMatchJsonDecode['status'] == true) {
+     if (liveMatchJsonDecode['status'] == true) {
           if (liveMatchJsonDecode['data'] is List) {
               List<LiveMatchFull> matches = (liveMatchJsonDecode['data'] as List)
                   .map((json) => LiveMatchFull.fromJson(json))
@@ -33,6 +32,8 @@ Future getRealTimeData(id) async {
               return matches;
             } else if (liveMatchJsonDecode['data'] is Map) {
               LiveMatchFull match = LiveMatchFull.fromJson(liveMatchJsonDecode['data']);
+         
+ 
              return [match];
             } else {
               throw Exception('Invalid data format: Unexpected data type');

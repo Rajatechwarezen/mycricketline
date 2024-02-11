@@ -111,8 +111,8 @@ class MatchDetailsLayout extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: DataTable(
             showCheckboxColumn: false,
-            horizontalMargin: 10, // Adjust the horizontal margin as needed
-            columnSpacing: 10, // Adjust the spacing between columns as needed
+            horizontalMargin: 5, // Adjust the horizontal margin as needed
+            columnSpacing: 5, // Adjust the spacing between columns as needed
             columns: [
               DataColumn(
                   label: SizedBox(

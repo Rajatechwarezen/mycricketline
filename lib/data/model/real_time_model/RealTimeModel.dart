@@ -52,6 +52,7 @@ class LiveMatchFull {
   final dynamic runneed;
   final dynamic teamBScores;
   final dynamic teamBover;
+final   LastWicket?  lastWicket;
   LiveMatchFull(
       {this.target,
       this.matchId,
@@ -104,9 +105,11 @@ class LiveMatchFull {
       this.rRRate,
       this.teamBScores,
       this.teamBover,
+      this.lastWicket,
       this.runneed});
 
   factory LiveMatchFull.fromJson(Map<String, dynamic>? json) {
+
     return LiveMatchFull(
         runneed: json?["run_need"] ?? "",
         rRRate: json?["rr_rate"] ?? "",
@@ -133,12 +136,12 @@ class LiveMatchFull {
         teamAImg: json?['team_a_img'] ?? "",
         teamBId: json?['team_b_id'] ?? "",
         teamB: json?['team_b'] ?? "",
-        teamBScores: json?['team_b_scores'],
+        teamBScores: json?['team_b_scores'] ??"",
         teamBScore:  TeamScore.fromJson(json?['team_b_score']) ,
-        teamBover: json?['team_b_over'],
+        teamBover: json?['team_b_over'] ??"",
         teamBShort: json?['team_b_short'] ?? "",
         teamBImg: json?['team_b_img'] ?? "",
-        nextBatsman: json?['next_batsman'],
+        nextBatsman: json?['next_batsman'] ??"",
         currentInning: json?['current_inning'] ?? "",
         batsmen: (json?['batsman'] as List<dynamic>?)
             ?.map((x) => Batsman.fromJson(x))
@@ -168,7 +171,11 @@ class LiveMatchFull {
             ?.map((x) => OverStats.fromJson(x))
             .toList(),
         last36Ball: (json?['last36ball'] as List<dynamic>?)?.cast<String>(),
+        lastWicket: json != null && json['lastwicket'] != null
+    ? LastWicket.fromJson(json['lastwicket'])
+    : null,
         session: json?['session'] ?? "");
+        
   }
 }
 
@@ -288,22 +295,46 @@ class Partnership {
 }
 
 class OverStats {
-  final dynamic ball;
   final dynamic ballOver;
+  final dynamic ball;
 
   final dynamic run;
 
   OverStats({
-    this.ball,
     this.ballOver,
+    this.ball,
     this.run,
   });
 
   factory OverStats.fromJson(Map<String, dynamic>? json) {
     return OverStats(
-      ball: json?['balls'] ?? "",
       ballOver: json?['over'] ?? "",
+     ball: List<String>.from(json?['balls']),
       run: json?['runs'] ?? "",
+    );
+  }
+}
+
+
+
+
+
+class LastWicket {
+  final dynamic player;
+  final dynamic run;
+  final dynamic ball;
+
+  LastWicket({
+    required this.player,
+    required this.run,
+    required this.ball,
+  });
+
+  factory LastWicket.fromJson(Map<String, dynamic> json) {
+    return LastWicket(
+      player: json['player'],
+      run: json['run'],
+      ball: json['ball'],
     );
   }
 }

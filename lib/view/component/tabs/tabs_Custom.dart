@@ -8,7 +8,7 @@ MyTab(name) {
   return Tab(
     child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       decoration: const BoxDecoration(
         color: MyColor.mytransparentColor
         ),

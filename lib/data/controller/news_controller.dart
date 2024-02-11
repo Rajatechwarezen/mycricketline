@@ -19,7 +19,7 @@ int currentPage = 1;
 
   
 Future<List<Sky11>> makeApiRequest() async {
-  String url = 'http://sky11.news/wp-json/wp/v2/posts?per_page=10';
+  String url = 'http://sky11.news/wp-json/wp/v2/posts?per_page=16';
 
 
   var response = await apiClient.requestGet(

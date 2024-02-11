@@ -44,6 +44,7 @@ class _RealTimeLiveScreenState extends State<RealTimeLiveScreen> {
   RealTimeController realTimeDataController = Get.put(
       RealTimeController(realTimeRepo: RealTimeRepo(apiClient: Get.find())));
 
+bool isCardBoxVisible = false;
   @override
   void initState() {
     super.initState();
@@ -63,6 +64,8 @@ class _RealTimeLiveScreenState extends State<RealTimeLiveScreen> {
   void dispose() {
     super.dispose();
     timer.cancel();
+realTimeDataController.allLiveMatches.clear();
+    
   }
 
   @override
@@ -71,7 +74,10 @@ class _RealTimeLiveScreenState extends State<RealTimeLiveScreen> {
 
     return Obx(() => realTimeDataController.isLoading.value
         ? const CustomLoader()
-        : SafeArea(
+        :
+        
+        
+         SafeArea(
             child: Scaffold(
                 body: SingleChildScrollView(
             child: Column(
@@ -119,7 +125,53 @@ class _RealTimeLiveScreenState extends State<RealTimeLiveScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          cardBoxUi(
+
+
+
+
+
+
+
+
+Container(
+  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  child: Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      if (matchData.currRate != "") buildDataRow("CRR", matchData.currRate.toString()),
+      if (matchData.rRRate != "") buildDataRow("RRR", matchData.rRRate.toString()),
+      if (matchData.target != "") buildDataRow("TARGET", matchData.target.toString()),
+      // if (matchData.lastWicket!.player != "") buildDataRow("LW", matchData.lastWicket!.player.toString()),
+    ],
+  ),
+),
+
+
+
+
+Column(
+  children: [
+    last24Balls(matchData.last4Overs,matchData.matchOver),
+   IconButton(onPressed: (){
+
+      setState(() {
+        isCardBoxVisible = !isCardBoxVisible;
+      });
+    
+   }, icon: Icon(Icons.arrow_downward))
+  
+  ],
+),
+
+
+
+
+
+        Visibility(
+           visible: isCardBoxVisible,
+          child: 
+         cardBoxUi(
                             screenWidth: screenWidth,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
@@ -184,91 +236,9 @@ class _RealTimeLiveScreenState extends State<RealTimeLiveScreen> {
                               ),
                             ),
                           ),
-
-                          cardBoxUi(
-                            screenWidth: screenWidth,
-                            child: Column(children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  //col1
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text("CRR :-",
-                                                style: interLightExtraSmall
-                                                    .copyWith(
-                                                        color: MyColor
-                                                            .getTextColor())),
-                                            Text(matchData.currRate ?? "0",
-                                                style: interLightExtraSmall
-                                                    .copyWith(
-                                                        color: MyColor
-                                                            .getTextColor())),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text("RRR :-",
-                                                style: interLightExtraSmall
-                                                    .copyWith(
-                                                        color: MyColor
-                                                            .getTextColor())),
-                                            Text(matchData.rRRate.toString(),
-                                                style: interLightExtraSmall
-                                                    .copyWith(
-                                                        color: MyColor
-                                                            .getTextColor())),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text("TARGET :-",
-                                                style: interLightExtraSmall
-                                                    .copyWith(
-                                                        color: MyColor
-                                                            .getTextColor())),
-                                            Text(matchData.target.toString(),
-                                                style: interLightExtraSmall
-                                                    .copyWith(
-                                                        color: MyColor
-                                                            .getTextColor())),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ]),
-                          ),
-
+        ),
+       
+       
                           cardBoxUi(
                             screenWidth: screenWidth,
                             child: Column(children: [
@@ -713,6 +683,8 @@ class _RealTimeLiveScreenState extends State<RealTimeLiveScreen> {
                             ]),
                           ),
                           //Session =================================================
+                          
+                           if(matchData.session != "")
                           cardBoxUi(
                             screenWidth: screenWidth,
                             child: Column(
@@ -776,13 +748,3 @@ class _RealTimeLiveScreenState extends State<RealTimeLiveScreen> {
   }
 }
 
-cardBoxUi({Widget? child, screenWidth}) {
-  return Container(
-    padding: const EdgeInsets.all(5),
-    margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-    decoration: BoxDecoration(
-        color: MyColor.getCardBg(), borderRadius: boRadiusAll, border: border),
-    child: child!,
-    width: screenWidth * 0.9,
-  );
-}

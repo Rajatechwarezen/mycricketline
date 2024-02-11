@@ -8,6 +8,7 @@ import 'package:sprotbuzz/core/utilis/style.dart';
 import 'package:sprotbuzz/data/repo/RealTimeRepo/Info_Repo.dart';
 import 'package:sprotbuzz/view/component/custom_loader/custom_loader.dart';
 import 'package:sprotbuzz/view/screens/InsideLiveScreen/Real_Time_Live/RealTimeLiveScreen.dart';
+import 'package:sprotbuzz/view/screens/InsideLiveScreen/Real_Time_Live/RealTimecomponent/RealTimecomponent.dart';
 import 'package:sprotbuzz/view/screens/InsideLiveScreen/player/PlayerScreen.dart';
 
 import '../../../../data/controller/Infomation_controller/Infomation_controller.dart';
